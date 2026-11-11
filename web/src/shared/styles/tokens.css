@@ -97,6 +97,8 @@
   /* ---------- Layout do painel ---------- */
   --layout-max-width: 1344px;
   --layout-gutter: var(--space-12);
+  /* Abaixo disso a tabela de estandes rola na horizontal dentro do cartão */
+  --table-min-width: 960px;
   --form-max-width: 760px;
   --aside-width: 340px;
 

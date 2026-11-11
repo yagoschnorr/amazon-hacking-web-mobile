@@ -15,6 +15,7 @@ export function LoginPage() {
 
   return (
     <div className={styles.page}>
+      <title>Entrar · Circuito de Descobertas</title>
       <aside className={styles.aside}>
         <img src={logoUrl} alt="Amazon Hacking" className={styles.logo} />
 

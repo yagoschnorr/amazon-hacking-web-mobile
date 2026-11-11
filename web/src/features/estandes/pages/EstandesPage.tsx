@@ -71,6 +71,7 @@ export function EstandesPage() {
 
   return (
     <div className={styles.page}>
+      <title>Estandes · Circuito de Descobertas</title>
       <PageHeader
         title="Estandes"
         subtitle={subtitulo}

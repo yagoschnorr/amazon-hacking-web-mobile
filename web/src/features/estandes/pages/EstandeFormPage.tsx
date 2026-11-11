@@ -30,6 +30,11 @@ export function EstandeFormPage() {
 
   return (
     <div className={styles.page}>
+      <title>
+        {id
+          ? `Editar estande ${id} · Circuito de Descobertas`
+          : 'Novo estande · Circuito de Descobertas'}
+      </title>
       <Link to="/estandes" className={styles.voltar}>
         <Icon name="arrow_back" size={20} />
         Voltar para estandes

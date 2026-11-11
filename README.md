@@ -19,7 +19,7 @@ Os dois usam o mesmo projeto Firebase, no plano Spark: Authentication, Firestore
 .
 ├── CLAUDE.md                 # regras para o Claude Code
 ├── README.md
-├── firebase.json             # regras do Firestore e Hosting (etapa F1)
+├── firebase.json             # regras do Firestore (etapa F1) e Hosting (etapa W9)
 ├── .firebaserc               # id do projeto Firebase (etapa F1)
 ├── firestore.rules           # regras de segurança (etapa F1)
 ├── firestore.indexes.json    # (etapa F1)
@@ -47,9 +47,35 @@ Os dois usam o mesmo projeto Firebase, no plano Spark: Authentication, Firestore
 
 ### Painel web
 
-<!-- Preenchido na etapa W9. -->
+Dentro de `web/`:
 
-_A definir._
+```bash
+cd web
+npm install
+cp .env.example .env.local   # preencha com o app Web do console do Firebase
+npm run dev                  # http://localhost:5173
+```
+
+O login só aceita contas de administrador: um usuário de e-mail e senha no Authentication e um documento `admins/{uid}` no Firestore. Os dois são criados à mão no console ([guia](docs/guia-firebase.md)).
+
+| Comando | O que faz |
+| --- | --- |
+| `npm run dev` | Servidor de desenvolvimento |
+| `npm run build` | Checagem de tipos e build de produção em `web/dist` |
+| `npm run preview` | Serve o build de `web/dist` localmente |
+| `npm run lint` | ESLint |
+| `npm run format` | Prettier (`format:check` só confere) |
+| `npm test` | Testes unitários (Vitest) |
+
+#### Publicar no Firebase Hosting (opcional)
+
+O `firebase.json` já aponta o Hosting para `web/dist`, com rewrite para o `index.html` (as rotas do painel funcionam ao recarregar a página). Na raiz do repositório, depois de `npm run build` em `web/`:
+
+```bash
+firebase deploy --only hosting
+```
+
+O painel fica em `https://<id-do-projeto>.web.app`. Esse domínio já vem autorizado no Authentication. Se o CLI avisar que não há site de Hosting, abra Hosting no console do Firebase e clique em "Começar" antes de repetir o comando.
 
 ### App mobile
 

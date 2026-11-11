@@ -17,6 +17,7 @@ const INSTRUCAO =
 export function QrCodePage({ estande }: { estande: EstandeQr }) {
   return (
     <>
+      <title>{`QR code ${estande.id} · Circuito de Descobertas`}</title>
       {/* Versão de tela: some na impressão. */}
       <div className={styles.tela}>
         <header className={styles.barra}>
