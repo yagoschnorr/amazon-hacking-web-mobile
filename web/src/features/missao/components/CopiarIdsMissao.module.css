@@ -1,0 +1,13 @@
+.copiar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-4);
+}
+
+.legenda {
+  font-size: var(--small-text-size);
+  line-height: var(--small-text-line);
+  color: var(--ink-muted);
+}

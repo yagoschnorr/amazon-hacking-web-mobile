@@ -126,6 +126,30 @@
   margin-top: var(--space-4);
 }
 
+/* Seleção para a missão (W8) */
+.table th.selecao,
+.table td.selecao {
+  width: var(--control-md);
+  padding-right: 0;
+}
+
+.caixa {
+  display: block;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+.caixa:disabled {
+  cursor: not-allowed;
+}
+
+.selecionado td {
+  background: var(--primary-soft);
+}
+
 /* Coluna Check-ins */
 .table td.numero {
   text-align: right;

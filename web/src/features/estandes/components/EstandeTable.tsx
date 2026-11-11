@@ -11,26 +11,50 @@ interface EstandeTableProps {
   totais: TotaisPorEstande | null;
   // Estandes cujo total acabou de mudar (destaque breve).
   destacados: ReadonlySet<string>;
+  // Estandes ativos marcados para a missão (W8).
+  selecionados: ReadonlySet<string>;
+  onAlternarSelecao: (id: string) => void;
+  onSelecionarTodos: (marcar: boolean) => void;
   onAlternarAtivo: (estande: Estande) => void;
   onTentarDeNovo: () => void;
 }
 
-const COLUNAS = 6;
+const COLUNAS = 7;
 
 export function EstandeTable({
   estado,
   alterando,
   totais,
   destacados,
+  selecionados,
+  onAlternarSelecao,
+  onSelecionarTodos,
   onAlternarAtivo,
   onTentarDeNovo,
 }: EstandeTableProps) {
+  const ativos = estado.status === 'pronto' ? estado.estandes.filter((e) => e.ativo) : [];
+  const marcados = ativos.filter((e) => selecionados.has(e.id)).length;
+  const todos = ativos.length > 0 && marcados === ativos.length;
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.scroll}>
         <table className={styles.table}>
           <thead>
             <tr>
+              <th scope="col" className={styles.selecao}>
+                <input
+                  type="checkbox"
+                  className={styles.caixa}
+                  aria-label="Selecionar todos os estandes ativos para a missão"
+                  checked={todos}
+                  disabled={ativos.length === 0}
+                  ref={(el) => {
+                    if (el) el.indeterminate = marcados > 0 && !todos;
+                  }}
+                  onChange={() => onSelecionarTodos(!todos)}
+                />
+              </th>
               <th scope="col">Código</th>
               <th scope="col">Estande</th>
               <th scope="col">Localização</th>
@@ -79,8 +103,26 @@ export function EstandeTable({
               estado.estandes.map((estande) => (
                 <tr
                   key={estande.id}
-                  className={destacados.has(estande.id) ? styles.destacado : undefined}
+                  className={
+                    [
+                      selecionados.has(estande.id) && estande.ativo && styles.selecionado,
+                      destacados.has(estande.id) && styles.destacado,
+                    ]
+                      .filter(Boolean)
+                      .join(' ') || undefined
+                  }
                 >
+                  <td className={styles.selecao}>
+                    {estande.ativo && (
+                      <input
+                        type="checkbox"
+                        className={styles.caixa}
+                        aria-label={`Incluir ${estande.nome} na missão`}
+                        checked={selecionados.has(estande.id)}
+                        onChange={() => onAlternarSelecao(estande.id)}
+                      />
+                    )}
+                  </td>
                   <td className={styles.codigo}>{estande.id}</td>
                   <td>
                     <span className={styles.nome}>{estande.nome}</span>

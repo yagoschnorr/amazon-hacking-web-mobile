@@ -1,2 +1,2 @@
-// API pública da feature missao. Preenchida na etapa W8.
-export {};
+export { CopiarIdsMissao } from './components/CopiarIdsMissao';
+export { montarJsonMissao } from './utils/jsonMissao';
