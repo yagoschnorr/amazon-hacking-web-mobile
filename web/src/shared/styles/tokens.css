@@ -118,4 +118,34 @@
   --control-md: 44px;
   --control-lg: 56px;
   --touch-min: 48px;
+
+  /* ---------- Bordas ---------- */
+  --border-thin: 1px;
+  --border-field: 1.5px;
+  --border-thick: 2px;
+
+  /* ---------- Tamanhos internos dos componentes (tokens.md) ---------- */
+  --button-sm-size: 14px;
+  --small-text-size: 14px;
+  --small-text-line: 20px;
+  --tag-height: 26px;
+  --tag-size: 12px;
+  --tag-line: 16px;
+  --tag-tracking: 0.06em;
+  --switch-width: 52px;
+  --switch-height: 32px;
+  --switch-thumb-off: 16px;
+  --switch-thumb-on: 24px;
+
+  /* ---------- Medidas das telas (fora da escala, tokens.md) ---------- */
+  --logo-bar-height: 36px;
+  --logo-login-height: 40px;
+  --accent-width: 40px;
+  --accent-height: 4px;
+  --login-aside-padding: 56px 64px;
+  --login-aside-width: 670px;
+  --login-card-width: 440px;
+  --login-intro-width: 440px;
+  --toast-width: 360px;
+  --modal-width: 480px;
 }

@@ -1,0 +1,90 @@
+.page {
+  display: grid;
+  grid-template-columns: minmax(0, var(--login-aside-width)) minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+/* Lado institucional */
+.aside {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-12);
+  padding: var(--login-aside-padding);
+  background: var(--surface-inverse);
+  color: var(--on-inverse);
+}
+
+.logo {
+  display: block;
+  align-self: flex-start;
+  height: var(--logo-login-height);
+  width: auto;
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.accent {
+  width: var(--accent-width);
+  height: var(--accent-height);
+  margin-bottom: var(--space-2);
+  border-radius: var(--radius-full);
+  background: var(--glow);
+}
+
+.overline {
+  font-size: var(--overline-size);
+  line-height: var(--overline-line);
+  font-weight: var(--overline-weight);
+  letter-spacing: var(--overline-tracking);
+  text-transform: uppercase;
+}
+
+.display {
+  font-size: var(--display-size);
+  line-height: var(--display-line);
+  font-weight: var(--display-weight);
+  letter-spacing: var(--display-tracking);
+}
+
+.lead {
+  max-width: var(--login-intro-width);
+  font-size: var(--body-lg-size);
+  line-height: var(--body-lg-line);
+}
+
+.footer {
+  font-size: var(--small-text-size);
+  line-height: var(--small-text-line);
+}
+
+/* Lado do formulário */
+.main {
+  display: grid;
+  place-items: center;
+  padding: var(--space-12) var(--space-6);
+  background: var(--surface-page);
+}
+
+@media (max-width: 960px) {
+  .page {
+    grid-template-columns: 1fr;
+  }
+
+  .aside {
+    gap: var(--space-8);
+    padding: var(--space-8) var(--space-4);
+  }
+
+  .footer {
+    display: none;
+  }
+
+  .main {
+    padding: var(--space-8) var(--space-4);
+  }
+}

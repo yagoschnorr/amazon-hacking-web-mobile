@@ -1,0 +1,29 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: var(--tag-height);
+  padding: 0 10px;
+  border-radius: var(--radius-full);
+  font-size: var(--tag-size);
+  line-height: var(--tag-line);
+  font-weight: 700;
+  letter-spacing: var(--tag-tracking);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.ativo {
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+.inativo {
+  background: var(--surface-sunken);
+  color: var(--ink-muted);
+}
+
+.missao {
+  background: var(--missao);
+  color: var(--on-missao);
+}

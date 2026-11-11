@@ -1,7 +1,9 @@
 import { useState, type FormEvent } from 'react';
+import { Button, Icon, Input } from '@/shared/components';
 import { mensagemErroLogin } from '../api/errosLogin';
 import { useAuth } from '../hooks/useAuth';
 import type { ErroLogin } from '../types';
+import styles from './LoginForm.module.css';
 
 export function LoginForm() {
   const { sessao, erroSessao, entrar } = useAuth();
@@ -27,43 +29,50 @@ export function LoginForm() {
   }
 
   return (
-    <form onSubmit={enviar} aria-busy={ocupado}>
-      <h1>Entrar no painel</h1>
-      <p>Use o e-mail e a senha da organização do evento.</p>
+    <section className={styles.card}>
+      <header className={styles.header}>
+        <h1 className={styles.title}>Entrar no painel</h1>
+        <p className={styles.subtitle}>Use o e-mail e a senha da organização do evento.</p>
+      </header>
 
-      {erro && (
-        <div role="alert">
-          <strong>{erro.titulo}</strong>
-          <p>{erro.detalhe}</p>
-        </div>
-      )}
+      <form className={styles.form} onSubmit={enviar} aria-busy={ocupado}>
+        {erro && (
+          <div className={styles.alert} role="alert">
+            <Icon name="error" size={22} fill className={styles.alertIcon} />
+            <div>
+              <p className={styles.alertTitle}>{erro.titulo}</p>
+              <p className={styles.alertText}>{erro.detalhe}</p>
+            </div>
+          </div>
+        )}
 
-      <label htmlFor="login-email">E-mail</label>
-      <input
-        id="login-email"
-        type="email"
-        autoComplete="username"
-        placeholder="nome@exemplo.com.br"
-        required
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+        <Input
+          label="E-mail"
+          type="email"
+          icon="mail"
+          autoComplete="username"
+          placeholder="nome@exemplo.com.br"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
-      <label htmlFor="login-senha">Senha</label>
-      <input
-        id="login-senha"
-        type="password"
-        autoComplete="current-password"
-        required
-        value={senha}
-        onChange={(e) => setSenha(e.target.value)}
-      />
+        <Input
+          label="Senha"
+          type="password"
+          icon="lock"
+          autoComplete="current-password"
+          required
+          value={senha}
+          onChange={(e) => setSenha(e.target.value)}
+        />
 
-      <button type="submit" disabled={ocupado}>
-        Entrar
-      </button>
+        <Button type="submit" icon="login" disabled={ocupado} className={styles.submit}>
+          Entrar
+        </Button>
+      </form>
 
-      <p>Esqueceu a senha? Fale com a coordenação do evento.</p>
-    </form>
+      <p className={styles.note}>Esqueceu a senha? Fale com a coordenação do evento.</p>
+    </section>
   );
 }

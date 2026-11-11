@@ -1,0 +1,106 @@
+.switch {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--switch-width) 1fr;
+  column-gap: var(--space-4);
+  align-items: center;
+}
+
+/* O checkbox fica invisível sobre o trilho; o trilho é o que se vê. */
+.input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--switch-width);
+  height: var(--switch-height);
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.track {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  position: relative;
+  width: var(--switch-width);
+  height: var(--switch-height);
+  background: var(--surface);
+  border: var(--border-thick) solid var(--line-strong);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease;
+}
+
+.thumb {
+  position: absolute;
+  top: 50%;
+  left: 6px;
+  display: grid;
+  place-items: center;
+  width: var(--switch-thumb-off);
+  height: var(--switch-thumb-off);
+  background: var(--line-strong);
+  border-radius: var(--radius-full);
+  color: var(--primary);
+  transform: translateY(-50%);
+  transition:
+    left 120ms ease,
+    width 120ms ease,
+    height 120ms ease,
+    background-color 120ms ease;
+}
+
+.input:checked + .track {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.input:checked + .track .thumb {
+  left: calc(100% - var(--switch-thumb-on) - 2px);
+  width: var(--switch-thumb-on);
+  height: var(--switch-thumb-on);
+  background: var(--surface);
+}
+
+.input:focus-visible + .track {
+  box-shadow: var(--focus-ring);
+}
+
+.label {
+  grid-column: 2;
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+  font-weight: 500;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.description {
+  grid-column: 2;
+  font-size: var(--caption-size);
+  line-height: var(--caption-line);
+  font-weight: var(--caption-weight);
+  color: var(--ink-muted);
+}
+
+.disabled .input,
+.disabled .track,
+.disabled .label {
+  cursor: not-allowed;
+}
+
+.disabled .track {
+  border-color: var(--line);
+}
+
+.disabled .input:checked + .track {
+  background: var(--line);
+  border-color: var(--line);
+}
+
+.disabled .label,
+.disabled .description {
+  color: var(--ink-subtle);
+}

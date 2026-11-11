@@ -1,0 +1,80 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  width: 100%;
+  max-width: var(--login-card-width);
+  padding: var(--space-12);
+  background: var(--surface);
+  border: var(--border-thin) solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.title {
+  font-size: var(--title-lg-size);
+  line-height: var(--title-lg-line);
+  font-weight: var(--title-lg-weight);
+  letter-spacing: var(--title-lg-tracking);
+}
+
+.subtitle {
+  color: var(--ink-muted);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.submit {
+  width: 100%;
+  margin-top: var(--space-2);
+}
+
+.note {
+  margin-top: calc(-1 * var(--space-2));
+  font-size: var(--caption-size);
+  line-height: var(--caption-line);
+  font-weight: var(--caption-weight);
+  color: var(--ink-muted);
+}
+
+/* Alerta de erro inline (tokens.md, "Padrões montados nas telas") */
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--error-soft);
+  border: var(--border-thin) solid var(--error);
+  border-radius: var(--radius-md);
+}
+
+.alertIcon {
+  color: var(--error);
+}
+
+.alertTitle {
+  font-weight: 700;
+  color: var(--error);
+}
+
+.alertText {
+  font-size: var(--small-text-size);
+  line-height: var(--small-text-line);
+  color: var(--ink);
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: var(--space-6);
+  }
+}
