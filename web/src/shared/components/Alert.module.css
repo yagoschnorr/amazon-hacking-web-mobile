@@ -1,0 +1,24 @@
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--error-soft);
+  border: var(--border-thin) solid var(--error);
+  border-radius: var(--radius-md);
+}
+
+.icon {
+  color: var(--error);
+}
+
+.title {
+  font-weight: 700;
+  color: var(--error);
+}
+
+.message {
+  font-size: var(--small-text-size);
+  line-height: var(--small-text-line);
+  color: var(--ink);
+}

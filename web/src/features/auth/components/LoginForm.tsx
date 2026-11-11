@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { Button, Icon, Input } from '@/shared/components';
+import { Alert, Button, Input } from '@/shared/components';
 import { mensagemErroLogin } from '../api/errosLogin';
 import { useAuth } from '../hooks/useAuth';
 import type { ErroLogin } from '../types';
@@ -36,15 +36,7 @@ export function LoginForm() {
       </header>
 
       <form className={styles.form} onSubmit={enviar} aria-busy={ocupado}>
-        {erro && (
-          <div className={styles.alert} role="alert">
-            <Icon name="error" size={22} fill className={styles.alertIcon} />
-            <div>
-              <p className={styles.alertTitle}>{erro.titulo}</p>
-              <p className={styles.alertText}>{erro.detalhe}</p>
-            </div>
-          </div>
-        )}
+        {erro && <Alert title={erro.titulo} message={erro.detalhe} />}
 
         <Input
           label="E-mail"

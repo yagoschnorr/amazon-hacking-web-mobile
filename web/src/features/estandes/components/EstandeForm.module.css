@@ -1,0 +1,42 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-8);
+  background: var(--surface);
+  border: var(--border-thin) solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Código e Nome lado a lado, como no design */
+.linha {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 8fr);
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.divisoria {
+  width: 100%;
+  margin: 0;
+  border: 0;
+  border-top: var(--border-thin) solid var(--line);
+}
+
+.acoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+@media (max-width: 600px) {
+  .card {
+    padding: var(--space-6) var(--space-4);
+  }
+
+  .linha {
+    grid-template-columns: 1fr;
+  }
+}

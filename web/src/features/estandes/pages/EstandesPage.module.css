@@ -1,0 +1,26 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.secao {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.secaoCabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: var(--control-md);
+}
+
+.secaoTitulo {
+  font-size: var(--subtitle-size);
+  line-height: var(--subtitle-line);
+  font-weight: var(--subtitle-weight);
+}
