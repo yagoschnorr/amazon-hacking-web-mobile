@@ -71,6 +71,18 @@
   width: var(--qr-preview-size);
 }
 
+.checkins {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--surface-page);
+  font-weight: 600;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
 .lateralBotao {
   width: 100%;
   margin-top: var(--space-2);

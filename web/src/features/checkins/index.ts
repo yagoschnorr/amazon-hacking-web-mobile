@@ -1,2 +1,6 @@
-// API pública da feature checkins. Preenchida na etapa W7.
-export {};
+export { useCheckinTotals, type EstadoCheckins } from './hooks/useCheckinTotals';
+export {
+  contarPorEstande,
+  textoCheckinsAteAgora,
+  type TotaisPorEstande,
+} from './utils/contarPorEstande';

@@ -1,4 +1,5 @@
 import { Link, Navigate, useNavigate, useParams } from 'react-router';
+import { textoCheckinsAteAgora, useCheckinTotals } from '@/features/checkins';
 import { EstandeQrCode } from '@/features/qrcode';
 import { Alert, ButtonLink, Icon, PageHeader } from '@/shared/components';
 import { atualizarEstande, criarEstande } from '../api/estandesApi';
@@ -16,6 +17,7 @@ export function EstandeFormPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { estado } = useEstandes();
+  const { estado: checkins } = useCheckinTotals();
 
   if (estado.status === 'carregando') return null;
 
@@ -79,6 +81,12 @@ export function EstandeFormPage() {
                 Gerado a partir do código {id}. Continua valendo depois de qualquer alteração nos
                 outros campos.
               </p>
+              {checkins.status === 'pronto' && (
+                <p className={styles.checkins}>
+                  <Icon name="how_to_reg" size={20} />
+                  {textoCheckinsAteAgora(checkins.porEstande[id] ?? 0)}
+                </p>
+              )}
               <ButtonLink
                 to={`/estandes/${id}/qr`}
                 target="_blank"

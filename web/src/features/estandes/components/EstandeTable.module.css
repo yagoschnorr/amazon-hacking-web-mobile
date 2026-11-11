@@ -125,3 +125,32 @@
 .estadoAcao {
   margin-top: var(--space-4);
 }
+
+/* Coluna Check-ins */
+.table td.numero {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Destaque breve na linha cujo total de check-ins acabou de mudar */
+.destacado td {
+  animation: destaque 2.4s ease-out;
+}
+
+@keyframes destaque {
+  0%,
+  40% {
+    background: var(--success-soft);
+  }
+  100% {
+    background: transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .destacado td {
+    animation: none;
+    background: var(--success-soft);
+  }
+}

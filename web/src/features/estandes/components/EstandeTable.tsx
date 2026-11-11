@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import type { TotaisPorEstande } from '@/features/checkins';
 import { Badge, Button, ButtonLink, Icon, IconLink, type IconName } from '@/shared/components';
 import type { Estande, EstadoLista } from '../types';
 import styles from './EstandeTable.module.css';
@@ -6,15 +7,21 @@ import styles from './EstandeTable.module.css';
 interface EstandeTableProps {
   estado: EstadoLista;
   alterando: ReadonlySet<string>;
+  // null enquanto os check-ins carregam ou se a leitura falhar.
+  totais: TotaisPorEstande | null;
+  // Estandes cujo total acabou de mudar (destaque breve).
+  destacados: ReadonlySet<string>;
   onAlternarAtivo: (estande: Estande) => void;
   onTentarDeNovo: () => void;
 }
 
-const COLUNAS = 5;
+const COLUNAS = 6;
 
 export function EstandeTable({
   estado,
   alterando,
+  totais,
+  destacados,
   onAlternarAtivo,
   onTentarDeNovo,
 }: EstandeTableProps) {
@@ -28,6 +35,9 @@ export function EstandeTable({
               <th scope="col">Estande</th>
               <th scope="col">Localização</th>
               <th scope="col">Status</th>
+              <th scope="col" className={styles.alignEnd}>
+                Check-ins
+              </th>
               <th scope="col" className={styles.alignEnd}>
                 Ações
               </th>
@@ -67,7 +77,10 @@ export function EstandeTable({
 
             {estado.status === 'pronto' &&
               estado.estandes.map((estande) => (
-                <tr key={estande.id}>
+                <tr
+                  key={estande.id}
+                  className={destacados.has(estande.id) ? styles.destacado : undefined}
+                >
                   <td className={styles.codigo}>{estande.id}</td>
                   <td>
                     <span className={styles.nome}>{estande.nome}</span>
@@ -76,6 +89,9 @@ export function EstandeTable({
                   <td>{estande.localizacao}</td>
                   <td>
                     <Badge status={estande.ativo ? 'ativo' : 'inativo'} />
+                  </td>
+                  <td className={styles.numero}>
+                    {totais ? (totais[estande.id] ?? 0).toLocaleString('pt-BR') : '–'}
                   </td>
                   <td>
                     <div className={styles.acoes}>

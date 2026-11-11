@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+import { useCheckinTotals } from '@/features/checkins';
 import { ButtonLink, PageHeader, Toast } from '@/shared/components';
 import { definirAtivo } from '../api/estandesApi';
 import { EstandeTable } from '../components/EstandeTable';
+import { TotalCheckinsCard } from '../components/TotalCheckinsCard';
 import { useEstandes } from '../hooks/useEstandes';
 import type { Estande } from '../types';
 import { resumoEstandes } from '../utils/estande';
@@ -11,6 +13,7 @@ const AVISO_DURACAO_MS = 6000;
 
 export function EstandesPage() {
   const { estado, tentarDeNovo } = useEstandes();
+  const { estado: checkins, destacados } = useCheckinTotals();
   const [alterando, setAlterando] = useState<ReadonlySet<string>>(new Set());
   const [aviso, setAviso] = useState<string | null>(null);
 
@@ -55,6 +58,8 @@ export function EstandesPage() {
         }
       />
 
+      <TotalCheckinsCard estado={checkins} />
+
       <section className={styles.secao} aria-labelledby="titulo-estandes-cadastrados">
         <div className={styles.secaoCabecalho}>
           <h2 id="titulo-estandes-cadastrados" className={styles.secaoTitulo}>
@@ -64,6 +69,8 @@ export function EstandesPage() {
         <EstandeTable
           estado={estado}
           alterando={alterando}
+          totais={checkins.status === 'pronto' ? checkins.porEstande : null}
+          destacados={destacados}
           onAlternarAtivo={(estande) => void alternarAtivo(estande)}
           onTentarDeNovo={tentarDeNovo}
         />
