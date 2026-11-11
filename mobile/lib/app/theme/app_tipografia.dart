@@ -1,0 +1,93 @@
+import 'package:flutter/material.dart';
+
+/// Escala tipográfica do sistema de design (docs/design/tokens.md).
+/// Uma família só, Figtree, empacotada em assets/fonts.
+abstract final class AppTipografia {
+  static const familia = 'Figtree';
+
+  /// Contagens, tempos e códigos usam algarismos tabulares.
+  static const tabular = [FontFeature.tabularFigures()];
+
+  // 40/44, 800, −0,01em
+  static const display = TextStyle(
+    fontFamily: familia,
+    fontSize: 40,
+    height: 44 / 40,
+    fontWeight: FontWeight.w800,
+    letterSpacing: -0.4,
+  );
+
+  // 28/34, 700, −0,005em
+  static const titleLg = TextStyle(
+    fontFamily: familia,
+    fontSize: 28,
+    height: 34 / 28,
+    fontWeight: FontWeight.w700,
+    letterSpacing: -0.14,
+  );
+
+  // 22/28, 700
+  static const title = TextStyle(
+    fontFamily: familia,
+    fontSize: 22,
+    height: 28 / 22,
+    fontWeight: FontWeight.w700,
+  );
+
+  // 18/24, 600
+  static const subtitle = TextStyle(
+    fontFamily: familia,
+    fontSize: 18,
+    height: 24 / 18,
+    fontWeight: FontWeight.w600,
+  );
+
+  // 16/24, 400: corpo no app
+  static const bodyLg = TextStyle(
+    fontFamily: familia,
+    fontSize: 16,
+    height: 24 / 16,
+    fontWeight: FontWeight.w400,
+  );
+
+  // 15/22, 400
+  static const body = TextStyle(
+    fontFamily: familia,
+    fontSize: 15,
+    height: 22 / 15,
+    fontWeight: FontWeight.w400,
+  );
+
+  // 15/20, 700: botões e rótulos
+  static const label = TextStyle(
+    fontFamily: familia,
+    fontSize: 15,
+    height: 20 / 15,
+    fontWeight: FontWeight.w700,
+  );
+
+  // 13/18, 500: ajuda, localização no cartão, legendas
+  static const caption = TextStyle(
+    fontFamily: familia,
+    fontSize: 13,
+    height: 18 / 13,
+    fontWeight: FontWeight.w500,
+  );
+
+  // 12/16, 700, 0,12em. O texto vai em caixa alta no widget (toUpperCase).
+  static const overline = TextStyle(
+    fontFamily: familia,
+    fontSize: 12,
+    height: 16 / 12,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 1.44,
+  );
+
+  // 17/22, 700: botão principal do app (AppButton)
+  static const appButton = TextStyle(
+    fontFamily: familia,
+    fontSize: 17,
+    height: 22 / 17,
+    fontWeight: FontWeight.w700,
+  );
+}
