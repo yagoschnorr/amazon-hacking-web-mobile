@@ -59,9 +59,13 @@ _A definir._
 
 ### Regras do Firestore
 
-<!-- Preenchido na etapa F1. -->
+Com o Firebase CLI instalado, `firebase login` feito e o ID do projeto no `.firebaserc`, na raiz do repositório:
 
-_A definir._
+```bash
+firebase deploy --only firestore:rules
+```
+
+Passo a passo completo em [docs/guia-firebase.md](docs/guia-firebase.md). O contrato de dados está em [docs/contrato-de-dados.md](docs/contrato-de-dados.md).
 
 ## Segredos
 

@@ -1,0 +1,57 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function autenticado() {
+      return request.auth != null;
+    }
+
+    function ehAdmin() {
+      return autenticado()
+        && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    function estandeValido() {
+      return request.resource.data.keys().hasOnly(
+          ['nome', 'descricao', 'localizacao', 'ativo', 'criadoEm', 'atualizadoEm'])
+        && request.resource.data.nome is string
+        && request.resource.data.nome.size() > 0
+        && request.resource.data.descricao is string
+        && request.resource.data.localizacao is string
+        && request.resource.data.ativo is bool;
+    }
+
+    match /admins/{uid} {
+      allow get: if autenticado() && request.auth.uid == uid;
+      allow list, write: if false;
+    }
+
+    match /estandes/{estandeId} {
+      // resource == null permite distinguir "não existe" de "inativo" no app
+      allow get: if ehAdmin()
+        || (autenticado() && (resource == null || resource.data.ativo == true));
+      allow list: if ehAdmin()
+        || (autenticado() && resource.data.ativo == true);
+      allow create: if ehAdmin()
+        && estandeId.matches('^[A-Z0-9]{2,12}$')
+        && estandeValido();
+      allow update: if ehAdmin() && estandeValido();
+      allow delete: if false;
+    }
+
+    match /checkins/{checkinId} {
+      allow get: if ehAdmin()
+        || (autenticado() && checkinId.matches(request.auth.uid + '_.+'));
+      allow list: if ehAdmin()
+        || (autenticado() && resource.data.visitanteId == request.auth.uid);
+      allow create: if autenticado()
+        && request.resource.data.keys().hasOnly(['visitanteId', 'estandeId', 'criadoEm'])
+        && request.resource.data.visitanteId == request.auth.uid
+        && request.resource.data.estandeId is string
+        && checkinId == request.auth.uid + '_' + request.resource.data.estandeId
+        && request.resource.data.criadoEm == request.time
+        && get(/databases/$(database)/documents/estandes/$(request.resource.data.estandeId)).data.ativo == true;
+      allow update, delete: if false;
+    }
+  }
+}
