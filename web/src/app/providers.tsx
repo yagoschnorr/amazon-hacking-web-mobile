@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
+import { AuthProvider } from '@/features/auth';
 
-// Ponto único dos providers globais. O AuthProvider entra na etapa W3.
 export function Providers({ children }: { children: ReactNode }) {
-  return children;
+  return <AuthProvider>{children}</AuthProvider>;
 }
