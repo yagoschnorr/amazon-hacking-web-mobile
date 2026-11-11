@@ -147,6 +147,30 @@
   --login-card-width: 440px;
   --login-intro-width: 440px;
   --empty-icon-size: 72px;
+
+  /* ---------- Folha de QR (tokens.md: QR em tela cheia e A4) ---------- */
+  --qr-screen-size: 480px;
+  --qr-print-size: 500px;
+  --qr-preview-size: 176px;
+  --qr-sheet-width: 1120px;
+  --qr-gap: 56px;
+  --qr-a4-margin: 72px;
+  --qr-a4-text-width: 540px;
+  --qr-name-size: 64px;
+  --qr-name-line: 68px;
+  --qr-print-name-size: 72px;
+  --qr-print-name-line: 76px;
+  --qr-name-tracking: -0.015em;
+  --qr-print-overline-size: 14px;
+  --qr-print-overline-line: 18px;
+  --qr-print-location-size: 24px;
+  --qr-print-location-line: 30px;
+  --qr-description-size: 20px;
+  --qr-description-line: 28px;
+  --qr-instruction-size: 18px;
+  --qr-instruction-line: 26px;
+  --qr-chip-size: 18px;
+  --qr-chip-line: 24px;
   --toast-width: 360px;
   --modal-width: 480px;
 }

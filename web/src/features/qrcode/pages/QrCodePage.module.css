@@ -1,0 +1,259 @@
+/* ---------- Tela ---------- */
+
+.tela {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  max-width: var(--layout-max-width);
+  margin: 0 auto;
+  padding: var(--space-6) var(--layout-gutter);
+}
+
+.barra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--control-md);
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.imprimir {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.dica {
+  font-size: var(--small-text-size);
+  line-height: var(--small-text-line);
+  color: var(--ink-muted);
+}
+
+.centro {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  padding: var(--space-12) 0;
+}
+
+.cartao {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--qr-gap);
+  width: 100%;
+  max-width: var(--qr-sheet-width);
+  padding: var(--space-12);
+  background: var(--surface);
+  border: var(--border-thin) solid var(--line);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+.qrTela {
+  width: var(--qr-screen-size);
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.overline {
+  font-size: var(--overline-size);
+  line-height: var(--overline-line);
+  font-weight: var(--overline-weight);
+  letter-spacing: var(--overline-tracking);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.nome {
+  font-size: var(--qr-name-size);
+  line-height: var(--qr-name-line);
+  font-weight: 800;
+  letter-spacing: var(--qr-name-tracking);
+  overflow-wrap: anywhere;
+}
+
+.descricao {
+  font-size: var(--qr-description-size);
+  line-height: var(--qr-description-line);
+  color: var(--ink-muted);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--control-md);
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-full);
+  background: var(--surface-page);
+  font-size: var(--qr-chip-size);
+  line-height: var(--qr-chip-line);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.chipCodigo {
+  background: var(--primary-soft);
+  color: var(--primary-pressed);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.divisoria {
+  width: 100%;
+  margin: var(--space-2) 0;
+  border: 0;
+  border-top: var(--border-thin) solid var(--line);
+}
+
+.instrucao {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  font-size: var(--qr-instruction-size);
+  line-height: var(--qr-instruction-line);
+  font-weight: 500;
+  color: var(--ink);
+}
+
+@media (max-width: 1100px) {
+  .cartao {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    padding: var(--space-8) var(--space-6);
+  }
+
+  .qrTela {
+    width: min(var(--qr-screen-size), 100%);
+  }
+}
+
+@media (max-width: 720px) {
+  .tela {
+    padding: var(--space-4);
+  }
+
+  .nome {
+    font-size: var(--display-size);
+    line-height: var(--display-line);
+  }
+}
+
+/* ---------- Folha A4 ---------- */
+
+.folha {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+
+  :global(body) {
+    background: var(--surface);
+  }
+
+  .tela {
+    display: none;
+  }
+
+  .folha {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 100vh;
+    padding: var(--qr-a4-margin);
+    overflow: hidden;
+    background: var(--surface);
+    color: var(--ink);
+    text-align: center;
+    break-inside: avoid;
+  }
+}
+
+.folhaTopo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.folhaOverline {
+  font-size: var(--qr-print-overline-size);
+  line-height: var(--qr-print-overline-line);
+  font-weight: 700;
+  letter-spacing: var(--overline-tracking);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.folhaNome {
+  font-size: var(--qr-print-name-size);
+  line-height: var(--qr-print-name-line);
+  font-weight: 800;
+  letter-spacing: var(--qr-name-tracking);
+}
+
+.qrFolha {
+  width: var(--qr-print-size);
+}
+
+.folhaRodape {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-8);
+  width: 100%;
+}
+
+.folhaLocal {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--qr-print-location-size);
+  line-height: var(--qr-print-location-line);
+  font-weight: 700;
+}
+
+.folhaDivisoria {
+  width: 100%;
+  margin: 0;
+  border: 0;
+  border-top: var(--border-thin) solid var(--line-strong);
+}
+
+.folhaInstrucao {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  max-width: var(--qr-a4-text-width);
+  font-size: var(--qr-instruction-size);
+  line-height: var(--qr-instruction-line);
+  text-align: left;
+}

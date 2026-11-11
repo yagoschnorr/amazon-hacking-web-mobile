@@ -1,5 +1,6 @@
 import { Link, Navigate, useNavigate, useParams } from 'react-router';
-import { Alert, Icon, PageHeader } from '@/shared/components';
+import { EstandeQrCode } from '@/features/qrcode';
+import { Alert, ButtonLink, Icon, PageHeader } from '@/shared/components';
 import { atualizarEstande, criarEstande } from '../api/estandesApi';
 import { EstandeForm } from '../components/EstandeForm';
 import { useEstandes } from '../hooks/useEstandes';
@@ -67,6 +68,29 @@ export function EstandeFormPage() {
               }}
             />
           </div>
+
+          {id && (
+            <aside className={styles.lateral}>
+              <h2 className={styles.lateralTitulo}>QR code do estande</h2>
+              <div className={styles.qrPrevia}>
+                <EstandeQrCode estandeId={id} className={styles.qrPreviaSvg} />
+              </div>
+              <p>
+                Gerado a partir do código {id}. Continua valendo depois de qualquer alteração nos
+                outros campos.
+              </p>
+              <ButtonLink
+                to={`/estandes/${id}/qr`}
+                target="_blank"
+                rel="noopener"
+                variant="secondary"
+                icon="qr_code_2"
+                className={styles.lateralBotao}
+              >
+                Ver QR code
+              </ButtonLink>
+            </aside>
+          )}
 
           {!id && (
             <aside className={styles.lateral}>

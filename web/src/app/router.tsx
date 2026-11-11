@@ -1,8 +1,8 @@
 import { createBrowserRouter, Navigate } from 'react-router';
 import { LoginPage, ProtectedRoute } from '@/features/auth';
 import { EstandeFormPage, EstandesPage } from '@/features/estandes';
-import { QrCodePage } from '@/features/qrcode';
 import { PainelLayout } from './PainelLayout';
+import { QrCodeRoute } from './QrCodeRoute';
 
 export const router = createBrowserRouter([
   { path: '/', element: <Navigate to="/estandes" replace /> },
@@ -20,7 +20,7 @@ export const router = createBrowserRouter([
         ],
       },
       // QR em tela cheia e impressão, sem a barra do painel.
-      { path: '/estandes/:id/qr', element: <QrCodePage /> },
+      { path: '/estandes/:id/qr', element: <QrCodeRoute /> },
     ],
   },
   { path: '*', element: <Navigate to="/estandes" replace /> },

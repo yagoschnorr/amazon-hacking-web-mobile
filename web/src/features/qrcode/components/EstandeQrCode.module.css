@@ -1,0 +1,10 @@
+.qr {
+  display: block;
+  flex-shrink: 0;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  background: var(--surface);
+  color: var(--ink);
+  shape-rendering: crispEdges;
+}

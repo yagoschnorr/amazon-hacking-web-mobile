@@ -84,6 +84,13 @@ export function EstandeTable({
                         icon="edit"
                         label={`Editar ${estande.nome}`}
                       />
+                      <IconLink
+                        to={`/estandes/${estande.id}/qr`}
+                        target="_blank"
+                        rel="noopener"
+                        icon="qr_code_2"
+                        label={`QR code de ${estande.nome} (abre em nova aba)`}
+                      />
                       <Button
                         variant="secondary"
                         size="sm"

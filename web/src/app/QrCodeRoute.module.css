@@ -1,0 +1,5 @@
+.erro {
+  max-width: var(--form-max-width);
+  margin: 0 auto;
+  padding: var(--space-12) var(--layout-gutter);
+}
