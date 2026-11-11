@@ -1,0 +1,121 @@
+/*
+ * Tokens do design — fonte: docs/design/tokens.md
+ * Nenhuma cor, tamanho, raio ou sombra fica solto nos componentes: use estas variáveis.
+ * Só tema claro.
+ */
+:root {
+  /* ---------- Cores ---------- */
+  --primary: #0165b7;
+  --primary-hover: #01589f;
+  --primary-pressed: #024a85;
+  --primary-soft: #e6f0fa;
+  --primary-deep: #0a4e8f;
+  --on-primary: #ffffff;
+
+  --surface-page: #f3f6fa;
+  --surface: #ffffff;
+  --surface-sunken: #e9eef4;
+  --surface-inverse: #111214;
+  --on-inverse: #ffffff;
+  --glow: #06e2ff;
+
+  --ink: #111418;
+  --ink-muted: #475467;
+  --ink-subtle: #5f6b7a;
+
+  --line: #d6dde6;
+  --line-strong: #7b8796;
+
+  --success: #127a3f;
+  --success-soft: #e4f5eb;
+  --warning: #a14a00;
+  --warning-soft: #fff0de;
+  --error: #c0211d;
+  --error-soft: #fdecea;
+  --error-hover: #a01b18;
+
+  --missao: #ffb81c;
+  --missao-soft: #fff5d6;
+  --missao-ink: #6e4600;
+  --on-missao: #111418;
+
+  --scrim: #11141866;
+
+  /* ---------- Tipografia ---------- */
+  --font-family: 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --display-size: 40px;
+  --display-line: 44px;
+  --display-weight: 800;
+  --display-tracking: -0.01em;
+
+  --title-lg-size: 28px;
+  --title-lg-line: 34px;
+  --title-lg-weight: 700;
+  --title-lg-tracking: -0.005em;
+
+  --title-size: 22px;
+  --title-line: 28px;
+  --title-weight: 700;
+
+  --subtitle-size: 18px;
+  --subtitle-line: 24px;
+  --subtitle-weight: 600;
+
+  --body-lg-size: 16px;
+  --body-lg-line: 24px;
+  --body-lg-weight: 400;
+
+  --body-size: 15px;
+  --body-line: 22px;
+  --body-weight: 400;
+
+  --label-size: 15px;
+  --label-line: 20px;
+  --label-weight: 700;
+
+  --caption-size: 13px;
+  --caption-line: 18px;
+  --caption-weight: 500;
+
+  --overline-size: 12px;
+  --overline-line: 16px;
+  --overline-weight: 700;
+  --overline-tracking: 0.12em;
+
+  /* ---------- Espaçamento (grade de 4px) ---------- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* ---------- Layout do painel ---------- */
+  --layout-max-width: 1344px;
+  --layout-gutter: var(--space-12);
+  --form-max-width: 760px;
+  --aside-width: 340px;
+
+  /* ---------- Raios ---------- */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-full: 9999px;
+
+  /* ---------- Sombras ---------- */
+  --shadow-sm: 0 1px 2px #1114180f, 0 1px 3px #1114180a;
+  --shadow-md: 0 4px 12px #11141814;
+  --shadow-lg: 0 12px 32px #11141829;
+  --focus-ring: 0 0 0 2px #ffffff, 0 0 0 4px #0165b7;
+
+  /* ---------- Alturas de controle ---------- */
+  --control-sm: 36px;
+  --control-md: 44px;
+  --control-lg: 56px;
+  --touch-min: 48px;
+}
