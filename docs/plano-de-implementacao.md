@@ -81,6 +81,7 @@ Regra da arquitetura feature-based: uma feature só importa de `shared/` e do `i
 | Arquitetura | Feature-first: `auth`, `estandes`, `checkin`, `missao` |
 | Pacotes Firebase | `firebase_core`, `firebase_auth`, `cloud_firestore`, `firebase_remote_config`, `firebase_analytics` |
 | Leitura de QR | `mobile_scanner` |
+| Ícones | `material_symbols_icons` (Material Symbols Rounded, como pede o design) |
 | Estado | `StreamBuilder` sobre os streams do Firestore e um `ChangeNotifier` para a missão. Sem biblioteca de estado |
 | Navegação | `Navigator` padrão do Flutter |
 

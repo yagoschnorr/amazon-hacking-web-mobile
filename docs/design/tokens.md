@@ -263,7 +263,7 @@ Estes padrões não existem como componentes no sistema. Foram montados com os t
 
 Oito pontos precisam de decisão antes da implementação: dois de cor, quatro de componentes, um de texto e um de conteúdo.
 
-- [ ] **Cor fora dos tokens:** o trilho do indicador de carregamento usa `#2a2d32`. Trocar por um token ou criar um, como `line-inverse`.
+- [x] **Cor fora dos tokens:** o trilho do indicador de carregamento usa `#2a2d32`. Trocar por um token ou criar um, como `line-inverse`. Decisão (M3): criado o token `line-inverse` (`#2a2d32`), em `AppCores.lineInverse` no app.
 - [ ] **Hex fixos que equivalem a tokens:** o checkbox da tabela usa `accent-color: #0165b7` (= `primary`) e a lanterna usa `#06e2ff` (= `glow`) e `#ffffff` (= `surface`). No código, ler as variáveis.
 - [ ] **`FeedbackScreen`** tem 320×600px fixos, com borda e raio. Nas telas, foi esticado para 360×800, sem borda e com padding de 48px 16px 16px. Falta um modo de tela cheia no componente.
 - [ ] **`FeedbackScreen`** não tem o tipo “estande inativo”. A tela foi montada com as classes do componente (círculo `surface-sunken`, ícone `pause_circle`). Sugestão: `kind="inativo"`.
