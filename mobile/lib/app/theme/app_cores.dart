@@ -25,6 +25,9 @@ abstract final class AppCores {
   static const inkSubtle = Color(0xFF5F6B7A);
   static const line = Color(0xFFD6DDE6);
   static const lineStrong = Color(0xFF7B8796);
+  // Trilho do indicador de carregamento sobre surfaceInverse. Pendência do
+  // tokens.md resolvida na M3: o #2a2d32 das telas virou token.
+  static const lineInverse = Color(0xFF2A2D32);
 
   // Estados
   static const success = Color(0xFF127A3F);

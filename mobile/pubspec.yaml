@@ -9,9 +9,11 @@ environment:
   sdk: ^3.13.7
 
 dependencies:
+  firebase_auth: ^7.0.1
   firebase_core: ^5.1.0
   flutter:
     sdk: flutter
+  material_symbols_icons: ^4.2960.0
 
 dev_dependencies:
   flutter_test:
@@ -20,6 +22,11 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  # Logo do Amazon Hacking (web/src/shared/assets/logo-amazon-hacking.svg)
+  # em PNG 1x, 2x e 3x, com 32px de altura como na abertura.
+  assets:
+    - assets/images/
 
   # Figtree (SIL Open Font License, assets/fonts/OFL.txt), única família do design.
   fonts:

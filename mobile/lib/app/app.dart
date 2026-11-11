@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../features/auth/data/auth_service.dart';
+import '../features/auth/presentation/splash_page.dart';
 import 'theme/app_theme.dart';
 
 class CircuitoApp extends StatelessWidget {
@@ -11,8 +13,11 @@ class CircuitoApp extends StatelessWidget {
       title: 'Circuito de Descobertas',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.claro,
-      // Tela inicial vazia até a SplashPage (M3) e a HomePage (M4).
-      home: const Scaffold(),
+      home: SplashPage(
+        garantirSessao: AuthService().garantirSessao,
+        // Tela vazia até a HomePage (M4).
+        destino: (_) => const Scaffold(),
+      ),
     );
   }
 }

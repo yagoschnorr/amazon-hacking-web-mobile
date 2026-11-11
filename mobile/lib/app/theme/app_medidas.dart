@@ -50,3 +50,30 @@ abstract final class AppSombras {
     BoxShadow(color: Color(0x29111418), offset: Offset(0, 12), blurRadius: 32),
   ];
 }
+
+abstract final class AppIcones {
+  // Botão principal do app, voltar e fechar
+  static const botao = 24.0;
+  // Lista vazia e sem conexão
+  static const estado = 48.0;
+}
+
+/// Medidas fora da escala usadas nas telas (tokens.md, última seção).
+abstract final class AppForaDaEscala {
+  // Padding superior do topo do app
+  static const topoApp = 28.0;
+  // Respiros da abertura
+  static const respiro = 40.0;
+  // Traço glow da abertura
+  static const tracoLargura = 40.0;
+  static const tracoAltura = 4.0;
+  // Indicador de carregamento: anel de 40px com traço de 4px
+  static const indicador = 40.0;
+  static const indicadorTraco = 4.0;
+  // Entre o texto da abertura e o indicador de carregamento
+  static const abertura = 56.0;
+  // Altura do logo do Amazon Hacking na abertura
+  static const logoAbertura = 32.0;
+  // Círculo do ícone na tela sem conexão
+  static const circuloEstado = 96.0;
+}

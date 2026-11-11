@@ -58,5 +58,12 @@ abstract final class AppTheme {
       displayColor: AppCores.ink,
     ),
     scaffoldBackgroundColor: AppCores.surfacePage,
+    // Material Symbols Rounded: wght 500, GRAD 0, opsz 24, FILL 0.
+    iconTheme: const IconThemeData(
+      weight: 500,
+      grade: 0,
+      opticalSize: 24,
+      fill: 0,
+    ),
   );
 }
