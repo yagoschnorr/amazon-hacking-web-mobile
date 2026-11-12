@@ -5,6 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AuthService {
   final _auth = FirebaseAuth.instance;
 
+  /// uid do visitante. Só existe depois de [garantirSessao].
+  String get uid => _auth.currentUser!.uid;
+
   /// Devolve o usuário atual ou cria uma sessão anônima se não houver.
   Future<User> garantirSessao() async {
     // O primeiro evento traz a sessão restaurada do aparelho, se existir.

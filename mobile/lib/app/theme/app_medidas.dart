@@ -52,16 +52,39 @@ abstract final class AppSombras {
 }
 
 abstract final class AppIcones {
+  // Etiquetas, localização no cartão
+  static const xs = 16.0;
+  // Selo Visitado, linha de progresso no topo do app
+  static const sm = 18.0;
+  // Padrão
+  static const md = 20.0;
   // Botão principal do app, voltar e fechar
   static const botao = 24.0;
+  // Avatar "visitado"
+  static const lg = 28.0;
   // Lista vazia e sem conexão
   static const estado = 48.0;
 }
 
 /// Medidas fora da escala usadas nas telas (tokens.md, última seção).
 abstract final class AppForaDaEscala {
-  // Padding superior do topo do app
+  // Padding superior do topo do app; inferior no topo do detalhe
   static const topoApp = 28.0;
+  // Entre ícone e texto no topo do app e no selo Visitado
+  static const iconeTexto = 6.0;
+  // Padding horizontal das etiquetas (lado do texto)
+  static const etiqueta = 10.0;
+  // Entre nome, descrição e localização no cartão do estande
+  static const textoCartao = 6.0;
+  // Entre o ícone e o texto da instrução de leitura no detalhe
+  static const iconeInstrucao = 10.0;
+  // Altura das etiquetas e do selo Visitado
+  static const alturaEtiqueta = 26.0;
+  // Avatar do estande: 52px no cartão, 64px no detalhe
+  static const avatar = 52.0;
+  static const avatarGrande = 64.0;
+  // Círculo do ícone nas linhas de informação do detalhe
+  static const circuloInfo = 40.0;
   // Respiros da abertura
   static const respiro = 40.0;
   // Traço glow da abertura

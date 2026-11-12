@@ -6,10 +6,13 @@ import '../../app/theme/app_medidas.dart';
 import '../../app/theme/app_tipografia.dart';
 
 /// Topo do app: faixa primary-deep com cantos inferiores radius-xl,
-/// sobretítulo "AMAZON HACKING" e o nome do app. Ocupa também a área
-/// da barra de status.
+/// sobretítulo "AMAZON HACKING", o nome do app e uma linha opcional
+/// (progresso ou aviso). Ocupa também a área da barra de status.
 class TopoApp extends StatelessWidget {
-  const TopoApp({super.key});
+  const TopoApp({super.key, this.linha});
+
+  /// Linha abaixo do nome, em 15/22 e on-primary.
+  final Widget? linha;
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +50,18 @@ class TopoApp extends StatelessWidget {
                     color: AppCores.onPrimary,
                   ),
                 ),
+                if (linha case final linha?) ...[
+                  const SizedBox(height: AppEspacos.s2),
+                  DefaultTextStyle(
+                    style: AppTipografia.body.copyWith(
+                      color: AppCores.onPrimary,
+                    ),
+                    child: IconTheme.merge(
+                      data: const IconThemeData(color: AppCores.onPrimary),
+                      child: linha,
+                    ),
+                  ),
+                ],
               ],
             ),
           ),

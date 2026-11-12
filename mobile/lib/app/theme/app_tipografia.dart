@@ -90,4 +90,46 @@ abstract final class AppTipografia {
     height: 22 / 17,
     fontWeight: FontWeight.w700,
   );
+
+  // Tamanhos internos dos componentes e fora da escala (tokens.md)
+
+  // Selo "Visitado às 10h42": 13/18, 700
+  static const selo = TextStyle(
+    fontFamily: familia,
+    fontSize: 13,
+    height: 18 / 13,
+    fontWeight: FontWeight.w700,
+    fontFeatures: tabular,
+  );
+
+  // Iniciais do avatar do estande: 18px, 800, 0,02em
+  static const iniciais = TextStyle(
+    fontFamily: familia,
+    fontSize: 18,
+    fontWeight: FontWeight.w800,
+    letterSpacing: 0.36,
+  );
+
+  // Avatar grande no detalhe do app: 22px, 800
+  static const iniciaisGrande = TextStyle(
+    fontFamily: familia,
+    fontSize: 22,
+    fontWeight: FontWeight.w800,
+  );
+
+  // Detalhe do app: descrição, 18/26, 400
+  static const descricaoDetalhe = TextStyle(
+    fontFamily: familia,
+    fontSize: 18,
+    height: 26 / 18,
+    fontWeight: FontWeight.w400,
+  );
+
+  // Detalhe do app: valor das linhas de informação, 16/24, 600
+  static const valorInfo = TextStyle(
+    fontFamily: familia,
+    fontSize: 16,
+    height: 24 / 16,
+    fontWeight: FontWeight.w600,
+  );
 }
