@@ -12,17 +12,22 @@ import '../../../core/widgets/tela_sem_conexao.dart';
 import '../../../core/widgets/topo_app.dart';
 import '../../checkin/data/checkin_repository.dart';
 import '../../checkin/presentation/scanner_page.dart';
+import '../../missao/data/missao.dart';
+import '../../missao/data/missao_controller.dart';
+import '../../missao/presentation/missao_banner.dart';
+import '../../missao/presentation/missao_page.dart';
 import '../data/estande.dart';
 import '../data/estande_repository.dart';
 import 'estande_card.dart';
 import 'estande_detalhe_page.dart';
 
-/// Início (docs/design/mobile/02, 12 e 13): estandes ativos em tempo real,
-/// com os já visitados marcados.
+/// Início (docs/design/mobile/02, 03, 12 e 13): estandes ativos em tempo
+/// real, com os já visitados marcados e a missão surpresa quando ligada.
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.visitanteId});
+  const HomePage({super.key, required this.visitanteId, required this.missao});
 
   final String visitanteId;
+  final MissaoController missao;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -58,6 +63,21 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void _abrirMissao(List<Estande> estandes, Map<String, DateTime?> visitas) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => MissaoPage(
+          missao: widget.missao,
+          estandes: _estandeRepository.estandesAtivos(),
+          estandesIniciais: estandes,
+          visitas: _checkinRepository.visitas(widget.visitanteId),
+          visitasIniciais: visitas,
+          aoAbrirEstande: _abrirDetalhe,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Estande>>(
@@ -75,10 +95,20 @@ class _HomePageState extends State<HomePage> {
           builder: (context, visitas) {
             // Sem os check-ins (erro de leitura), a lista aparece sem marcas.
             if (!visitas.hasData && !visitas.hasError) return const Abertura();
-            return ListaEstandes(
-              estandes: lista,
-              visitas: visitas.data ?? const {},
-              aoTocar: _abrirDetalhe,
+            final mapa = visitas.data ?? const <String, DateTime?>{};
+            return ListenableBuilder(
+              listenable: widget.missao,
+              builder: (context, _) => ListaEstandes(
+                estandes: lista,
+                visitas: mapa,
+                aoTocar: _abrirDetalhe,
+                missao: ResumoMissao.calcular(
+                  widget.missao.missao,
+                  lista,
+                  widget.missao.agora,
+                ),
+                aoVerMissao: () => _abrirMissao(lista, mapa),
+              ),
             );
           },
         );
@@ -87,18 +117,23 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-/// Início com a lista (docs/design/mobile/02-inicio-missao-desligada.png).
+/// Início com a lista (docs/design/mobile/02 e 03): com a missão, banner no
+/// topo e faixa nos participantes ainda não visitados.
 class ListaEstandes extends StatelessWidget {
   const ListaEstandes({
     super.key,
     required this.estandes,
     required this.visitas,
     required this.aoTocar,
+    this.missao,
+    this.aoVerMissao,
   });
 
   final List<Estande> estandes;
   final Map<String, DateTime?> visitas;
   final ValueChanged<Estande> aoTocar;
+  final ResumoMissao? missao;
+  final VoidCallback? aoVerMissao;
 
   @override
   Widget build(BuildContext context) {
@@ -137,6 +172,15 @@ class ListaEstandes extends StatelessWidget {
                 AppEspacos.s4,
               ),
               children: [
+                if (missao case final missao?) ...[
+                  MissaoBanner(
+                    titulo: missao.titulo,
+                    mensagem: missao.mensagemBanner(visitas),
+                    tempo: missao.tempo,
+                    aoVerMissao: aoVerMissao ?? () {},
+                  ),
+                  const SizedBox(height: AppEspacos.s3),
+                ],
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.baseline,
                   textBaseline: TextBaseline.alphabetic,
@@ -158,12 +202,17 @@ class ListaEstandes extends StatelessWidget {
                     ),
                   ],
                 ),
-                for (final estande in estandes) ...[
+                for (final estande
+                    in missao?.ordenar(estandes, visitas) ?? estandes) ...[
                   const SizedBox(height: AppEspacos.s3),
                   EstandeCard(
                     estande: estande,
                     visitado: visitas.containsKey(estande.id),
                     visitadoEm: visitas[estande.id],
+                    destaque: (missao?.participa(estande) ?? false)
+                        ? DestaqueMissao.faixa
+                        : null,
+                    tempoMissao: missao?.tempo,
                     aoTocar: () => aoTocar(estande),
                   ),
                 ],

@@ -13,57 +13,96 @@ String horaVisita(DateTime horario) {
   return '${local.hour}h${local.minute.toString().padLeft(2, '0')}';
 }
 
-/// Cartão do estande no início (StandCard, estados `normal` e `visitado`).
+/// Destaque da missão num cartão ainda não visitado: com a faixa
+/// "Missão surpresa" no início ou com o chip "Falta visitar" na tela da missão.
+enum DestaqueMissao { faixa, faltaVisitar }
+
+/// Cartão do estande (StandCard, estados `normal`, `visitado` e `missao`).
 class EstandeCard extends StatelessWidget {
   const EstandeCard({
     super.key,
     required this.estande,
     required this.visitado,
     this.visitadoEm,
+    this.destaque,
+    this.tempoMissao,
     required this.aoTocar,
   });
 
   final Estande estande;
   final bool visitado;
   final DateTime? visitadoEm;
+
+  /// Ignorado quando o estande já foi visitado.
+  final DestaqueMissao? destaque;
+
+  /// "Faltam 25 min" na faixa; nulo para missão sem prazo.
+  final String? tempoMissao;
+
   final VoidCallback aoTocar;
 
   @override
   Widget build(BuildContext context) {
-    const forma = RoundedRectangleBorder(
-      side: BorderSide(color: AppCores.line),
-      borderRadius: BorderRadius.all(Radius.circular(AppRaios.lg)),
+    final destaque = visitado ? null : this.destaque;
+    final missao = destaque != null;
+    final borda = missao ? AppBordas.missao : AppBordas.fina;
+    final forma = RoundedRectangleBorder(
+      side: BorderSide(
+        color: missao ? AppCores.missao : AppCores.line,
+        width: borda,
+      ),
+      borderRadius: const BorderRadius.all(Radius.circular(AppRaios.lg)),
     );
+    final faixa = destaque == DestaqueMissao.faixa;
+
     return DecoratedBox(
-      decoration: const ShapeDecoration(shape: forma, shadows: AppSombras.sm),
+      decoration: ShapeDecoration(
+        shape: forma,
+        shadows: missao ? AppSombras.md : AppSombras.sm,
+      ),
       child: Material(
-        color: AppCores.surface,
+        color: missao ? AppCores.missaoSoft : AppCores.surface,
         shape: forma,
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: aoTocar,
-          child: Padding(
-            // 1px da borda + padding de 16px
-            padding: const EdgeInsets.all(AppEspacos.s4 + 1),
-            child: IntrinsicHeight(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: AvatarEstande(estande: estande, visitado: visitado),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (faixa) _FaixaMissao(tempo: tempoMissao, borda: borda),
+              Padding(
+                // Borda + padding de 16px; abaixo da faixa, só os 16px.
+                padding: EdgeInsets.fromLTRB(
+                  AppEspacos.s4 + borda,
+                  faixa ? AppEspacos.s4 : AppEspacos.s4 + borda,
+                  AppEspacos.s4 + borda,
+                  AppEspacos.s4 + borda,
+                ),
+                child: IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: AvatarEstande(
+                          estande: estande,
+                          visitado: visitado,
+                          missao: missao,
+                        ),
+                      ),
+                      const SizedBox(width: AppEspacos.s3),
+                      Expanded(child: _Textos(this, destaque)),
+                      const SizedBox(width: AppEspacos.s3),
+                      const Icon(
+                        Symbols.chevron_right_rounded,
+                        size: AppIcones.md,
+                        color: AppCores.inkMuted,
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: AppEspacos.s3),
-                  Expanded(child: _Textos(this)),
-                  const SizedBox(width: AppEspacos.s3),
-                  const Icon(
-                    Symbols.chevron_right_rounded,
-                    size: AppIcones.md,
-                    color: AppCores.inkMuted,
-                  ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
         ),
       ),
@@ -71,10 +110,69 @@ class EstandeCard extends StatelessWidget {
   }
 }
 
+/// Faixa amarela no topo do cartão: "⚡ MISSÃO SURPRESA" centralizado no
+/// espaço livre e o tempo à direita.
+class _FaixaMissao extends StatelessWidget {
+  const _FaixaMissao({required this.tempo, required this.borda});
+
+  final String? tempo;
+  final double borda;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: AppForaDaEscala.faixaMissao + borda,
+      color: AppCores.missao,
+      // A borda de cima é pintada por cima da faixa.
+      padding: EdgeInsets.fromLTRB(
+        AppEspacos.s4 + borda,
+        borda,
+        AppEspacos.s4 + borda,
+        0,
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Symbols.bolt_rounded,
+                  fill: 1,
+                  size: AppIcones.sm,
+                  color: AppCores.onMissao,
+                ),
+                const SizedBox(width: AppForaDaEscala.iconeTexto),
+                Flexible(
+                  child: Text(
+                    'MISSÃO SURPRESA',
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTipografia.faixaMissao.copyWith(
+                      color: AppCores.onMissao,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (tempo case final tempo?) ...[
+            const SizedBox(width: AppEspacos.s3),
+            Text(
+              tempo,
+              style: AppTipografia.selo.copyWith(color: AppCores.onMissao),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
 class _Textos extends StatelessWidget {
-  const _Textos(this.cartao);
+  const _Textos(this.cartao, this.destaque);
 
   final EstandeCard cartao;
+  final DestaqueMissao? destaque;
 
   @override
   Widget build(BuildContext context) {
@@ -111,6 +209,9 @@ class _Textos extends StatelessWidget {
         if (cartao.visitado) ...[
           const SizedBox(height: AppEspacos.s2),
           _SeloVisitado(cartao.visitadoEm),
+        ] else if (destaque == DestaqueMissao.faltaVisitar) ...[
+          const SizedBox(height: AppEspacos.s2),
+          const _ChipFaltaVisitar(),
         ],
       ],
     );
@@ -151,6 +252,42 @@ class _SeloVisitado extends StatelessWidget {
           Text(
             texto,
             style: AppTipografia.selo.copyWith(color: AppCores.success),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Chip "Falta visitar": borda de 1,5px e texto em missao-ink.
+class _ChipFaltaVisitar extends StatelessWidget {
+  const _ChipFaltaVisitar();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: AppForaDaEscala.alturaEtiqueta,
+      padding: const EdgeInsets.only(
+        left: AppForaDaEscala.iconeTexto,
+        right: AppForaDaEscala.etiqueta,
+      ),
+      decoration: const ShapeDecoration(
+        shape: StadiumBorder(
+          side: BorderSide(color: AppCores.missaoInk, width: AppBordas.media),
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(
+            Symbols.radio_button_unchecked_rounded,
+            size: AppIcones.xs,
+            color: AppCores.missaoInk,
+          ),
+          const SizedBox(width: AppEspacos.s1),
+          Text(
+            'Falta visitar',
+            style: AppTipografia.selo.copyWith(color: AppCores.missaoInk),
           ),
         ],
       ),

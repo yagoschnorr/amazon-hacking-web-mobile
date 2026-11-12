@@ -41,6 +41,9 @@ abstract final class AppBordas {
   static const media = 1.5;
   // Cantos da moldura de mira
   static const mira = 4.0;
+
+  /// Cartão destacado pela missão.
+  static const missao = 2.0;
 }
 
 abstract final class AppSombras {
@@ -71,6 +74,8 @@ abstract final class AppIcones {
   static const botao = 24.0;
   // Avatar "visitado"
   static const lg = 28.0;
+  // Ícone do banner da missão
+  static const banner = 26.0;
   // Lista vazia e sem conexão
   static const estado = 48.0;
   // Telas de retorno e de permissão
@@ -121,4 +126,13 @@ abstract final class AppForaDaEscala {
   static const lanterna = 64.0;
   // Lista de passos da permissão de câmera: coluna dos números
   static const numeroPasso = 16.0;
+
+  /// Círculo do ícone no banner da missão.
+  static const circuloBanner = 44.0;
+
+  /// Altura da faixa "Missão surpresa" no cartão, sem a borda.
+  static const faixaMissao = 32.0;
+
+  /// Barra de progresso do topo da missão.
+  static const barraProgresso = 8.0;
 }

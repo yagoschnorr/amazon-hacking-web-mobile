@@ -158,4 +158,41 @@ abstract final class AppTipografia {
     height: 20 / 14,
     fontWeight: FontWeight.w600,
   );
+
+  // Missão: sobretítulo do banner e do topo, 12/16, 800, 0,12em
+  static const sobretituloMissao = sobretituloRetorno;
+
+  // Banner da missão: título 22/28, 800
+  static const tituloBanner = TextStyle(
+    fontFamily: familia,
+    fontSize: 22,
+    height: 28 / 22,
+    fontWeight: FontWeight.w800,
+  );
+
+  // Tempo da missão (banner e chip do topo): 14/20, 700, tabular
+  static const tempoMissao = TextStyle(
+    fontFamily: familia,
+    fontSize: 14,
+    height: 20 / 14,
+    fontWeight: FontWeight.w700,
+    fontFeatures: tabular,
+  );
+
+  // Faixa "Missão surpresa" no cartão: 12/16, 800, 0,1em
+  static const faixaMissao = TextStyle(
+    fontFamily: familia,
+    fontSize: 12,
+    height: 16 / 12,
+    fontWeight: FontWeight.w800,
+    letterSpacing: 1.2,
+  );
+
+  // Topo da missão: título 28/34, 800
+  static const tituloMissao = TextStyle(
+    fontFamily: familia,
+    fontSize: 28,
+    height: 34 / 28,
+    fontWeight: FontWeight.w800,
+  );
 }

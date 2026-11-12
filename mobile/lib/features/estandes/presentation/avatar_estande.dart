@@ -7,7 +7,8 @@ import '../../../app/theme/app_tipografia.dart';
 import '../data/estande.dart';
 
 /// Avatar do estande: iniciais em primary-pressed sobre primary-soft, ou
-/// `check` em success sobre success-soft quando já foi visitado.
+/// `check` em success sobre success-soft quando já foi visitado, ou iniciais
+/// em on-missao sobre missao quando destacado pela missão.
 /// 52px no cartão e 64px (iniciais de 22px) no detalhe.
 class AvatarEstande extends StatelessWidget {
   const AvatarEstande({
@@ -15,11 +16,13 @@ class AvatarEstande extends StatelessWidget {
     required this.estande,
     this.visitado = false,
     this.grande = false,
+    this.missao = false,
   });
 
   final Estande estande;
   final bool visitado;
   final bool grande;
+  final bool missao;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +32,11 @@ class AvatarEstande extends StatelessWidget {
       height: lado,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: visitado ? AppCores.successSoft : AppCores.primarySoft,
+        color: visitado
+            ? AppCores.successSoft
+            : missao
+            ? AppCores.missao
+            : AppCores.primarySoft,
         borderRadius: BorderRadius.circular(AppRaios.md),
       ),
       child: visitado
@@ -44,7 +51,11 @@ class AvatarEstande extends StatelessWidget {
                   (grande
                           ? AppTipografia.iniciaisGrande
                           : AppTipografia.iniciais)
-                      .copyWith(color: AppCores.primaryPressed),
+                      .copyWith(
+                        color: missao
+                            ? AppCores.onMissao
+                            : AppCores.primaryPressed,
+                      ),
             ),
     );
   }
