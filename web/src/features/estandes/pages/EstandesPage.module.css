@@ -24,3 +24,11 @@
   line-height: var(--subtitle-line);
   font-weight: var(--subtitle-weight);
 }
+
+.acoesMissao {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}

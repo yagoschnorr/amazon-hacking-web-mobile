@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useCheckinTotals } from '@/features/checkins';
-import { CopiarIdsMissao } from '@/features/missao';
-import { ButtonLink, PageHeader, Toast } from '@/shared/components';
+import { CopiarIdsMissao, IniciarMissaoModal } from '@/features/missao';
+import { Button, ButtonLink, PageHeader, Toast } from '@/shared/components';
 import { definirAtivo } from '../api/estandesApi';
 import { EstandeTable } from '../components/EstandeTable';
 import { TotalCheckinsCard } from '../components/TotalCheckinsCard';
@@ -13,7 +13,7 @@ import styles from './EstandesPage.module.css';
 const AVISO_DURACAO_MS = 6000;
 
 interface Aviso {
-  tone: 'success' | 'error';
+  tone: 'success' | 'error' | 'missao';
   title: string;
   message: string;
 }
@@ -24,6 +24,7 @@ export function EstandesPage() {
   const [alterando, setAlterando] = useState<ReadonlySet<string>>(new Set());
   const [aviso, setAviso] = useState<Aviso | null>(null);
   const [selecionados, setSelecionados] = useState<ReadonlySet<string>>(new Set());
+  const [missaoAberta, setMissaoAberta] = useState(false);
 
   useEffect(() => {
     if (!aviso) return;
@@ -57,7 +58,8 @@ export function EstandesPage() {
       : undefined;
 
   // Só estandes ativos entram na missão; um estande inativado sai da seleção.
-  const ativos = estandes.filter((e) => e.ativo).map((e) => e.id);
+  const estandesAtivos = estandes.filter((e) => e.ativo);
+  const ativos = estandesAtivos.map((e) => e.id);
   const idsMissao = ativos.filter((id) => selecionados.has(id));
 
   function alternarSelecao(id: string) {
@@ -92,24 +94,34 @@ export function EstandesPage() {
             Estandes cadastrados
           </h2>
           {estado.status === 'pronto' && (
-            <CopiarIdsMissao
-              ids={idsMissao}
-              totalAtivos={ativos.length}
-              onCopiado={(json) =>
-                setAviso({
-                  tone: 'success',
-                  title: 'IDs copiados.',
-                  message: `Cole ${json} no parâmetro missao_estandes_ids do Remote Config e publique no console do Firebase.`,
-                })
-              }
-              onFalha={(json) =>
-                setAviso({
-                  tone: 'error',
-                  title: 'Não foi possível copiar.',
-                  message: `Copie manualmente ${json} para o parâmetro missao_estandes_ids do Remote Config.`,
-                })
-              }
-            />
+            <div className={styles.acoesMissao}>
+              <CopiarIdsMissao
+                ids={idsMissao}
+                totalAtivos={ativos.length}
+                onCopiado={(json) =>
+                  setAviso({
+                    tone: 'success',
+                    title: 'IDs copiados.',
+                    message: `Cole ${json} no parâmetro missao_estandes_ids do Remote Config e publique no console do Firebase.`,
+                  })
+                }
+                onFalha={(json) =>
+                  setAviso({
+                    tone: 'error',
+                    title: 'Não foi possível copiar.',
+                    message: `Copie manualmente ${json} para o parâmetro missao_estandes_ids do Remote Config.`,
+                  })
+                }
+              />
+              <Button
+                variant="missao"
+                icon="bolt"
+                disabled={ativos.length === 0}
+                onClick={() => setMissaoAberta(true)}
+              >
+                Iniciar missão
+              </Button>
+            </div>
           )}
         </div>
         <EstandeTable
@@ -124,6 +136,23 @@ export function EstandesPage() {
           onTentarDeNovo={tentarDeNovo}
         />
       </section>
+
+      {missaoAberta && (
+        <IniciarMissaoModal
+          estandes={estandesAtivos}
+          selecionadosIniciais={idsMissao}
+          onFechar={() => setMissaoAberta(false)}
+          onPublicada={() => {
+            setMissaoAberta(false);
+            setAviso({
+              tone: 'missao',
+              title: 'Missão publicada.',
+              message:
+                'O app aberto recebe a missão em segundos. Para encerrar, desligue missao_ativa no console do Firebase.',
+            });
+          }}
+        />
+      )}
 
       {aviso && (
         <Toast

@@ -1,0 +1,158 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  color: var(--ink);
+}
+
+.grupo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.cabecalho {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.rotulo {
+  font-size: var(--label-size);
+  line-height: var(--label-line);
+  font-weight: var(--label-weight);
+}
+
+.contagem {
+  font-size: var(--small-text-size);
+  line-height: var(--small-text-line);
+  color: var(--ink-muted);
+}
+
+/* Lista dos estandes ativos, com o mesmo checkbox e destaque da tabela */
+.lista {
+  max-height: calc(4.5 * var(--control-md));
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+  border: var(--border-thin) solid var(--line);
+  border-radius: var(--radius-md);
+}
+
+.lista li + li {
+  border-top: var(--border-thin) solid var(--line);
+}
+
+.opcao {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--control-md);
+  padding: var(--space-2) var(--space-4);
+  cursor: pointer;
+}
+
+.selecionado {
+  background: var(--primary-soft);
+}
+
+.caixa {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+.codigo {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.nome {
+  font-weight: 600;
+}
+
+.campos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+@media (max-width: 600px) {
+  .campos {
+    grid-template-columns: 1fr;
+  }
+}
+
+.semPrazo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--small-text-size);
+  line-height: var(--small-text-line);
+  cursor: pointer;
+}
+
+/* Valores que vão para o Remote Config */
+.valores {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface-sunken);
+  border-radius: var(--radius-md);
+}
+
+.valoresTitulo {
+  font-size: var(--small-text-size);
+  line-height: var(--small-text-line);
+  color: var(--ink-muted);
+}
+
+.tabela {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+}
+
+.linha {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.linha dd {
+  margin: 0;
+}
+
+.parametro {
+  font-size: var(--small-text-size);
+  line-height: var(--small-text-line);
+  font-weight: 600;
+}
+
+.valor {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  text-align: right;
+  font-size: var(--small-text-size);
+  line-height: var(--small-text-line);
+  font-variant-numeric: tabular-nums;
+}
+
+.erro {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-1);
+  font-size: var(--caption-size);
+  line-height: var(--caption-line);
+  font-weight: var(--caption-weight);
+  color: var(--error);
+}

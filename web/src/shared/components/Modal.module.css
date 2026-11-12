@@ -18,6 +18,11 @@
   gap: var(--space-4);
 }
 
+/* Conteúdo mais alto que a tela: o diálogo rola em vez de achatar os itens. */
+.modal[open] > * {
+  flex-shrink: 0;
+}
+
 .icon {
   display: grid;
   place-items: center;

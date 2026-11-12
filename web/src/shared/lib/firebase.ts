@@ -23,7 +23,7 @@ if (ausentes.length > 0) {
   );
 }
 
-const app = initializeApp({
+export const app = initializeApp({
   apiKey: env.VITE_FIREBASE_API_KEY,
   authDomain: env.VITE_FIREBASE_AUTH_DOMAIN,
   projectId: env.VITE_FIREBASE_PROJECT_ID,
