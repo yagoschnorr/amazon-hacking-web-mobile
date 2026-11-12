@@ -43,8 +43,12 @@ Consequência para as consultas: o app lista estandes com `where('ativo', '==', 
 | --- | --- | --- | --- |
 | `missao_ativa` | Boolean | `false` | `true` |
 | `missao_estandes_ids` | JSON | `[]` | `["E02","E03"]` |
+| `missao_inicio` | String | `""` | `2026-11-20T15:00:00-03:00` |
+| `missao_duracao_min` | Number | `0` | `30` |
 
 O app destaca apenas a interseção entre `missao_estandes_ids` e os estandes ativos. JSON malformado é tratado como lista vazia.
+
+`missao_inicio` usa ISO 8601 com fuso. Com início e duração válidos, o app mostra o prazo ("Visite 2 estandes em 30 min", "Faltam 25 min") e trata a missão como desligada antes do início e depois do fim. Início vazio ou inválido, ou duração menor ou igual a zero, deixa a missão sem prazo.
 
 ## Eventos do Analytics
 

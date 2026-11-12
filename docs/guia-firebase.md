@@ -16,10 +16,12 @@ Tudo roda no plano **Spark**, sem cartão. Não ativar Cloud Functions, Cloud St
    | --- | --- | --- |
    | `missao_ativa` | Boolean | `false` |
    | `missao_estandes_ids` | JSON | `[]` |
+   | `missao_inicio` | String | (vazio) |
+   | `missao_duracao_min` | Number | `0` |
 
 6. **Configurações do projeto → Seus apps:** registrar um app **Web** e guardar o objeto de configuração (`apiKey`, `authDomain`, `projectId`…). Ele vai para o `web/.env.local` na etapa W2.
 
-Aceite: os dois provedores ativos, o documento em `admins` e os dois parâmetros publicados.
+Aceite: os dois provedores ativos, o documento em `admins` e os quatro parâmetros publicados.
 
 ## 2. Publicação das regras do Firestore (etapa F1)
 

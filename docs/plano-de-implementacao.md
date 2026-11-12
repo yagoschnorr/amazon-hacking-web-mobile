@@ -311,8 +311,12 @@ Consequência para as consultas: o app lista estandes com `where('ativo', '==', 
 | --- | --- | --- | --- |
 | `missao_ativa` | Boolean | `false` | `true` |
 | `missao_estandes_ids` | JSON | `[]` | `["E02","E03"]` |
+| `missao_inicio` | String | `""` | `2026-11-20T15:00:00-03:00` |
+| `missao_duracao_min` | Number | `0` | `30` |
 
 O app destaca apenas a interseção entre `missao_estandes_ids` e os estandes ativos. JSON malformado é tratado como lista vazia.
+
+`missao_inicio` usa ISO 8601 com fuso. Com início e duração válidos, o app mostra o prazo ("Visite 2 estandes em 30 min", "Faltam 25 min") e trata a missão como desligada antes do início e depois do fim. Início vazio ou inválido, ou duração menor ou igual a zero, deixa a missão sem prazo.
 
 ### Eventos do Analytics
 
@@ -391,10 +395,10 @@ Três etapas deixam o terreno pronto. P1 e P2 são manuais, feitas por Yago. P3 
 2. Authentication: ativar os provedores "E-mail/senha" e "Anônimo".
 3. Authentication: criar o usuário administrador com um e-mail fictício e copiar o `uid`.
 4. Firestore: criar o banco em modo de produção. Criar a coleção `admins` com um documento cujo ID é o `uid` copiado e o campo `email`.
-5. Remote Config: criar `missao_ativa` (Boolean, `false`) e `missao_estandes_ids` (JSON, `[]`) e publicar.
+5. Remote Config: criar `missao_ativa` (Boolean, `false`), `missao_estandes_ids` (JSON, `[]`), `missao_inicio` (String, vazio) e `missao_duracao_min` (Number, `0`) e publicar.
 6. Registrar um app Web no projeto e guardar o objeto de configuração para o `.env.local`.
 
-Aceite: o console mostra os dois provedores ativos, o documento em `admins` e os dois parâmetros publicados. Esta etapa não gera commit.
+Aceite: o console mostra os dois provedores ativos, o documento em `admins` e os quatro parâmetros publicados. Esta etapa não gera commit.
 
 ### P2 — Design no Claude Design (Yago)
 
@@ -690,12 +694,13 @@ feat(mobile): registra check-in com validação do estande e bloqueio de duplica
 
 1. Adicionar `firebase_remote_config`.
 2. `MissaoController` (`ChangeNotifier`) com `ativa` (bool) e `estandesIds` (lista).
-3. Na inicialização: `setDefaults` com `missao_ativa: false` e `missao_estandes_ids: '[]'`, depois `fetchAndActivate()`. Falha de rede mantém o padrão local.
+3. Na inicialização: `setDefaults` com `missao_ativa: false`, `missao_estandes_ids: '[]'`, `missao_inicio: ''` e `missao_duracao_min: 0`, depois `fetchAndActivate()`. Falha de rede mantém o padrão local.
 4. Tempo real: escutar `onConfigUpdated`, chamar `activate()` e notificar os ouvintes.
 5. Ler `missao_estandes_ids` com `jsonDecode` protegido. Valor inválido vira lista vazia.
-6. Missão ligada: `MissaoBanner` no topo da `HomePage` e destaque nos cartões dos estandes participantes que estejam ativos.
-7. `MissaoPage` aberta pelo banner, listando os estandes participantes e quais já foram visitados.
-8. Missão desligada: banner e destaques somem. Se a `MissaoPage` estiver aberta, voltar para o início com o aviso "Missão encerrada".
+6. Prazo: com `missao_inicio` e `missao_duracao_min` válidos, mostrar "em N min" e a contagem "Faltam N min"; antes do início e depois do fim, a missão conta como desligada.
+7. Missão ligada: `MissaoBanner` no topo da `HomePage` e destaque nos cartões dos estandes participantes que estejam ativos.
+8. `MissaoPage` aberta pelo banner, listando os estandes participantes e quais já foram visitados.
+9. Missão desligada: banner e destaques somem. Se a `MissaoPage` estiver aberta, voltar para o início com o aviso "Missão encerrada".
 
 O intervalo mínimo de busca pode ser zero apenas em modo debug. Em release, a atualização imediata vem do listener de tempo real, que funciona com o app em primeiro plano.
 
