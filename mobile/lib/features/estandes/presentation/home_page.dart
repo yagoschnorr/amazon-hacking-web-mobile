@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import '../../../app/theme/app_cores.dart';
 import '../../../app/theme/app_medidas.dart';
 import '../../../app/theme/app_tipografia.dart';
+import '../../../core/analytics/analytics_service.dart';
 import '../../../core/widgets/abertura.dart';
 import '../../../core/widgets/app_button.dart';
 import '../../../core/widgets/rodape_fixo.dart';
@@ -36,6 +39,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final _estandeRepository = EstandeRepository();
   final _checkinRepository = CheckinRepository();
+  final _analytics = AnalyticsService();
   late Stream<List<Estande>> _estandes;
   late Stream<Map<String, DateTime?>> _visitas;
 
@@ -64,6 +68,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _abrirMissao(List<Estande> estandes, Map<String, DateTime?> visitas) {
+    unawaited(_analytics.missaoAberta());
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (_) => MissaoPage(

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../../core/analytics/analytics_service.dart';
 import '../../../core/constants/firestore.dart';
 import '../../estandes/data/estande.dart';
 
@@ -32,6 +33,7 @@ class CheckinService {
 
   final String visitanteId;
   final _db = FirebaseFirestore.instance;
+  final _analytics = AnalyticsService();
 
   /// Sem rede, a gravação fica na fila do Firestore e não confirma.
   static const _limiteGravacao = Duration(seconds: 10);
@@ -40,7 +42,8 @@ class CheckinService {
   /// 1. estande inexistente → `qrInvalido`; leitura negada → `estandeInativo`;
   /// 2. check-in já existente → `jaRegistrado`;
   /// 3. grava `{visitanteId}_{estandeId}` com o horário do servidor;
-  /// 4. gravação confirmada → `sucesso`; qualquer outra falha → `erro`.
+  /// 4. gravação confirmada → evento `checkin_concluido` e `sucesso`;
+  ///    qualquer outra falha → `erro`.
   ///
   /// Quem garante as regras é o Firestore: um estande inativado entre a
   /// leitura e a gravação é barrado e vira `estandeInativo`.
@@ -71,6 +74,7 @@ class CheckinService {
             CamposCheckin.criadoEm: FieldValue.serverTimestamp(),
           })
           .timeout(_limiteGravacao);
+      unawaited(_analytics.checkinConcluido(estandeId));
 
       return ResultadoCheckin(
         TipoResultado.sucesso,
