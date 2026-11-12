@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tokens do design (docs/design/tokens.md) usados fora do Flutter:
+         ícone do app e tela de abertura nativa. -->
+    <color name="surface_inverse">#111214</color>
+    <color name="glow">#06E2FF</color>
+</resources>
