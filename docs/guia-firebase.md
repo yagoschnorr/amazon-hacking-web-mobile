@@ -106,3 +106,55 @@ Em **Firestore Database → Regras → Playground de regras**, depois de publica
 - **Admin:** marcar **Autenticado**, provedor **Senha** e o UID do administrador.
 - **Leitura de lista** (cenários 2, 10 e 13): o simulador testa um documento por vez, não consultas. Por isso esses cenários ficam cobertos pelo emulador e, na prática, pelo próprio painel (W5 e W7) e pelo app (M4).
 - **Check-in** (cenários 6 a 9): tipo **create**, caminho `checkins/visitanteA_E01` e corpo com `visitanteId` e `estandeId`. A regra exige `criadoEm == request.time`, que só o `serverTimestamp()` do SDK satisfaz. No simulador, o cenário 6 tende a aparecer como negado. Os casos negados (7 a 9) podem ser conferidos no simulador. O cenário 6 fica coberto pelo emulador e pelo app na etapa M6.
+
+## 4. APK de release assinado (etapa M10)
+
+O APK de release é assinado com uma chave de upload própria. A keystore e as senhas ficam **fora do repositório**: `*.jks`, `*.keystore` e `key.properties` estão no `.gitignore`. Sem a chave, `flutter build apk --release` falha de propósito, em vez de sair assinado com a chave de debug.
+
+### Gerar a keystore (uma vez)
+
+Escolha uma pasta fora do repositório e rode o `keytool` do JDK que acompanha o Android Studio. Ele pede as senhas e os dados do certificado:
+
+```powershell
+& "C:\Program Files\Android\Android Studio\jbr\bin\keytool.exe" -genkeypair -v `
+  -keystore C:\caminho\fora\do\repo\circuito-upload.jks `
+  -keyalg RSA -keysize 2048 -validity 10000 -alias upload
+```
+
+Guarde o arquivo `.jks` e as senhas em local seguro, com cópia de reserva. Perder a keystore impede publicar atualizações assinadas com a mesma chave.
+
+### Criar `mobile/android/key.properties`
+
+```properties
+storePassword=<senha da keystore>
+keyPassword=<senha da chave>
+keyAlias=upload
+storeFile=C:/caminho/fora/do/repo/circuito-upload.jks
+```
+
+Use barras normais (`/`) no caminho. Confira com `git status` que o arquivo não aparece.
+
+### Gerar e conferir o APK
+
+```powershell
+cd mobile
+flutter build apk --release
+& "$env:LOCALAPPDATA\Android\Sdk\build-tools\<versão>\apksigner.bat" verify --print-certs build\app\outputs\flutter-apk\app-release.apk
+```
+
+O `apksigner` deve mostrar o DN informado na criação da keystore, e não `CN=Android Debug`. O APK fica em `mobile/build/app/outputs/flutter-apk/app-release.apk`.
+
+A versão vem de `version` no `mobile/pubspec.yaml` (`1.0.0+1`: `versionName` 1.0.0 e `versionCode` 1). A cada novo APK distribuído, aumente o número depois do `+`.
+
+### Instalar em um aparelho ou emulador limpo
+
+Um APK de release não instala por cima de uma versão de debug, porque as assinaturas são diferentes. Desinstale antes; isso apaga a sessão anônima do aparelho, e o visitante recebe um novo `uid`:
+
+```powershell
+& "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe" uninstall com.circuitodescobertas.app
+& "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe" install mobile\build\app\outputs\flutter-apk\app-release.apk
+```
+
+O caminho completo dispensa ter o `adb` no PATH.
+
+Aceite: o APK instala em um aparelho ou emulador limpo e repete lista, check-in, missão e eventos, com a assinatura da chave de upload.
