@@ -11,6 +11,7 @@ import '../../../core/widgets/tela_estado.dart';
 import '../../../core/widgets/tela_sem_conexao.dart';
 import '../../../core/widgets/topo_app.dart';
 import '../../checkin/data/checkin_repository.dart';
+import '../../checkin/presentation/scanner_page.dart';
 import '../data/estande.dart';
 import '../data/estande_repository.dart';
 import 'estande_card.dart';
@@ -173,8 +174,7 @@ class ListaEstandes extends StatelessWidget {
             child: AppButton(
               label: 'Ler QR code',
               icon: Symbols.qr_code_scanner_rounded,
-              // A ScannerPage chega na M5.
-              onPressed: () {},
+              onPressed: () => abrirLeitor(context),
             ),
           ),
         ],

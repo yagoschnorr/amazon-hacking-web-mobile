@@ -34,6 +34,15 @@ abstract final class AppAlturas {
   static const touchMin = 48.0;
 }
 
+abstract final class AppBordas {
+  // Contorno de cartões, divisórias
+  static const fina = 1.0;
+  // Campos de texto, botão tonal do app
+  static const media = 1.5;
+  // Cantos da moldura de mira
+  static const mira = 4.0;
+}
+
 abstract final class AppSombras {
   // Cartões em repouso
   static const sm = [
@@ -64,6 +73,8 @@ abstract final class AppIcones {
   static const lg = 28.0;
   // Lista vazia e sem conexão
   static const estado = 48.0;
+  // Telas de retorno e de permissão
+  static const retorno = 64.0;
 }
 
 /// Medidas fora da escala usadas nas telas (tokens.md, última seção).
@@ -99,4 +110,15 @@ abstract final class AppForaDaEscala {
   static const logoAbertura = 32.0;
   // Círculo do ícone na tela sem conexão
   static const circuloEstado = 96.0;
+  // Círculo do ícone nas telas de retorno e de permissão
+  static const circuloRetorno = 112.0;
+  // Leitor de QR: mira de 256px com cantos de 48px e raio de 20px
+  static const mira = 256.0;
+  static const cantoMira = 48.0;
+  // Entre a mira e a instrução de leitura
+  static const miraTexto = 28.0;
+  // Botão redondo da lanterna
+  static const lanterna = 64.0;
+  // Lista de passos da permissão de câmera: coluna dos números
+  static const numeroPasso = 16.0;
 }

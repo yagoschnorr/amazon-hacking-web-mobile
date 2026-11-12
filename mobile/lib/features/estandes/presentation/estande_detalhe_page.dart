@@ -7,6 +7,7 @@ import '../../../app/theme/app_medidas.dart';
 import '../../../app/theme/app_tipografia.dart';
 import '../../../core/widgets/app_button.dart';
 import '../../../core/widgets/rodape_fixo.dart';
+import '../../checkin/presentation/scanner_page.dart';
 import '../data/estande.dart';
 import 'avatar_estande.dart';
 import 'estande_card.dart';
@@ -97,8 +98,7 @@ class EstandeDetalhePage extends StatelessWidget {
                 child: AppButton(
                   label: 'Ler QR code',
                   icon: Symbols.qr_code_scanner_rounded,
-                  // A ScannerPage chega na M5.
-                  onPressed: () {},
+                  onPressed: () => abrirLeitor(context),
                 ),
               ),
             ],

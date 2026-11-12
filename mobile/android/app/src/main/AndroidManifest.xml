@@ -1,4 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Leitura do QR code dos estandes (mobile_scanner). -->
+    <uses-permission android:name="android.permission.CAMERA" />
     <application
         android:label="Circuito de Descobertas"
         android:name="${applicationName}"

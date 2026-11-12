@@ -132,4 +132,22 @@ abstract final class AppTipografia {
     height: 24 / 16,
     fontWeight: FontWeight.w600,
   );
+
+  // Tela de retorno: sobretítulo 12/16, 800, 0,12em (caixa alta no widget)
+  static const sobretituloRetorno = TextStyle(
+    fontFamily: familia,
+    fontSize: 12,
+    height: 16 / 12,
+    fontWeight: FontWeight.w800,
+    letterSpacing: 1.44,
+  );
+
+  // Tela de retorno: título 28/34, 800, −0,005em
+  static const tituloRetorno = TextStyle(
+    fontFamily: familia,
+    fontSize: 28,
+    height: 34 / 28,
+    fontWeight: FontWeight.w800,
+    letterSpacing: -0.14,
+  );
 }
