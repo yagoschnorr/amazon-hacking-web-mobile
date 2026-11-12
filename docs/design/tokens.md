@@ -269,7 +269,7 @@ Oito pontos precisam de decisão antes da implementação: dois de cor, quatro d
 - [ ] **`FeedbackScreen`** não tem o tipo “estande inativo”. A tela foi montada com as classes do componente (círculo `surface-sunken`, ícone `pause_circle`). Sugestão: `kind="inativo"`.
 - [ ] **`StandCard`** não tem descrição nem a combinação “visitado + Missão”. Sugestão: props `description` e `badges`.
 - [ ] **`DataTable`** aceita só uma linha selecionada (`selectedId`). A lista precisa de seleção múltipla para “Copiar IDs da missão”.
-- [ ] **Descrição nos cartões do app** está em `body` (15/22), estilo do painel. O sistema indica `body-lg` (16/24) para o app.
+- [x] **Descrição nos cartões do app** está em `body` (15/22), estilo do painel. O sistema indica `body-lg` (16/24) para o app. Decisão (M4): manter `body` (15/22), como nas telas.
 - [ ] **QR code de exemplo** codifica só o texto “E01”. Definir o conteúdo real que o app vai ler.
 
 Sem pendência, por regra do sistema: o logo do Amazon Hacking aparece só sobre `surface-inverse`, por isso fica fora da folha A4; e “Circuito de Descobertas” é sempre texto em Figtree, sem logotipo.
