@@ -150,4 +150,12 @@ abstract final class AppTipografia {
     fontWeight: FontWeight.w800,
     letterSpacing: -0.14,
   );
+
+  // Tela de retorno: detalhe (chip do estande) 14/20, 600
+  static const detalheRetorno = TextStyle(
+    fontFamily: familia,
+    fontSize: 14,
+    height: 20 / 14,
+    fontWeight: FontWeight.w600,
+  );
 }

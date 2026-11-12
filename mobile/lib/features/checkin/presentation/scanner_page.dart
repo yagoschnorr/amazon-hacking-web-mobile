@@ -8,30 +8,22 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import '../../../app/theme/app_cores.dart';
 import '../../../app/theme/app_medidas.dart';
 import '../../../app/theme/app_tipografia.dart';
+import '../../auth/data/auth_service.dart';
+import '../data/checkin_service.dart';
 import '../data/qr_payload.dart';
 import 'permissao_camera_negada.dart';
-import 'qr_invalido_page.dart';
-
-/// Abre o leitor e devolve o ID do estande lido, ou nulo se o visitante
-/// fechar sem ler.
-Future<String?> lerQrCode(BuildContext context) {
-  return Navigator.of(context)
-      .push<String>(MaterialPageRoute(builder: (_) => const ScannerPage()));
-}
+import 'resultado_checkin_page.dart';
 
 /// Botão "Ler QR code" do início e do detalhe.
-/// Provisório até a M6: mostra o código lido num aviso; a M6 troca isso pelo
-/// registro do check-in e pelas telas de retorno.
-Future<void> abrirLeitor(BuildContext context) async {
-  final estandeId = await lerQrCode(context);
-  if (estandeId == null || !context.mounted) return;
-  ScaffoldMessenger.of(context)
-      .showSnackBar(SnackBar(content: Text('QR lido: $estandeId')));
+Future<void> abrirLeitor(BuildContext context) {
+  return Navigator.of(context)
+      .push<void>(MaterialPageRoute(builder: (_) => const ScannerPage()));
 }
 
 /// Leitor de QR code (docs/design/mobile/06-leitor-de-qr-code.png).
 /// A câmera aparece só dentro da mira. Só a primeira leitura é processada:
-/// o leitor fica pausado até o retorno ser fechado.
+/// o leitor fica pausado enquanto registra o check-in e até o retorno ser
+/// fechado.
 class ScannerPage extends StatefulWidget {
   const ScannerPage({super.key});
 
@@ -43,6 +35,9 @@ class _ScannerPageState extends State<ScannerPage> with WidgetsBindingObserver {
   final _camera = MobileScannerController(formats: [BarcodeFormat.qrCode]);
   var _processando = false;
   var _foiParaConfiguracoes = false;
+
+  /// Criado na primeira leitura: a sessão anônima já existe desde a abertura.
+  late final _checkins = CheckinService(AuthService().uid);
 
   @override
   void initState() {
@@ -83,21 +78,30 @@ class _ScannerPageState extends State<ScannerPage> with WidgetsBindingObserver {
 
     final navegador = Navigator.of(context);
     final estandeId = parseQrPayload(texto);
-    if (estandeId != null) {
-      navegador.pop(estandeId);
-      return;
-    }
+    while (true) {
+      final resultado = estandeId == null
+          ? const ResultadoCheckin(TipoResultado.qrInvalido)
+          : await _checkins.registrar(estandeId);
+      if (!mounted) return;
 
-    final voltarAoInicio = await navegador.push<bool>(
-      MaterialPageRoute(builder: (_) => const QrInvalidoPage()),
-    );
-    if (!mounted) return;
-    if (voltarAoInicio ?? false) {
-      navegador.popUntil((rota) => rota.isFirst);
-      return;
+      final acao = await navegador.push<AcaoRetorno>(
+        MaterialPageRoute(
+          builder: (_) => ResultadoCheckinPage(resultado: resultado),
+        ),
+      );
+      if (!mounted) return;
+      switch (acao) {
+        case AcaoRetorno.tentarDeNovo:
+          continue;
+        case AcaoRetorno.voltarAoInicio:
+          navegador.popUntil((rota) => rota.isFirst);
+          return;
+        case AcaoRetorno.lerOutro || null:
+          _processando = false;
+          _iniciarCamera();
+          return;
+      }
     }
-    _processando = false;
-    _iniciarCamera();
   }
 
   void _abrirConfiguracoes() {

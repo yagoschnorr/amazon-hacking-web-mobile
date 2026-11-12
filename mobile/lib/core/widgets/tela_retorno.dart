@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
 import '../../app/theme/app_cores.dart';
 import '../../app/theme/app_medidas.dart';
@@ -8,7 +9,8 @@ import 'app_button.dart';
 
 /// Tela de retorno (FeedbackScreen do design, em tela cheia): fundo surface,
 /// padding de 48px 16px 16px, círculo de 112px com ícone de 64px,
-/// sobretítulo, título, mensagem, conteúdo opcional e dois botões no pé.
+/// sobretítulo, título, mensagem opcional, chip do estande opcional,
+/// conteúdo opcional e dois botões no pé.
 class TelaRetorno extends StatelessWidget {
   const TelaRetorno({
     super.key,
@@ -19,7 +21,8 @@ class TelaRetorno extends StatelessWidget {
     required this.sobretitulo,
     required this.corSobretitulo,
     required this.titulo,
-    required this.mensagem,
+    this.mensagem,
+    this.detalhe,
     this.conteudo,
     required this.rotuloPrincipal,
     this.iconePrincipal,
@@ -35,7 +38,10 @@ class TelaRetorno extends StatelessWidget {
   final String sobretitulo;
   final Color corSobretitulo;
   final String titulo;
-  final String mensagem;
+  final String? mensagem;
+
+  /// Chip com o estande ("Maré Viva · Corredor A, estande 1").
+  final String? detalhe;
 
   /// Bloco abaixo da mensagem, como a lista de passos da permissão.
   final Widget? conteudo;
@@ -98,14 +104,20 @@ class TelaRetorno extends StatelessWidget {
                               color: AppCores.ink,
                             ),
                           ),
-                          const SizedBox(height: AppEspacos.s4),
-                          Text(
-                            mensagem,
-                            textAlign: TextAlign.center,
-                            style: AppTipografia.bodyLg.copyWith(
-                              color: AppCores.inkMuted,
+                          if (mensagem case final mensagem?) ...[
+                            const SizedBox(height: AppEspacos.s4),
+                            Text(
+                              mensagem,
+                              textAlign: TextAlign.center,
+                              style: AppTipografia.bodyLg.copyWith(
+                                color: AppCores.inkMuted,
+                              ),
                             ),
-                          ),
+                          ],
+                          if (detalhe case final detalhe?) ...[
+                            const SizedBox(height: AppEspacos.s4),
+                            _ChipEstande(detalhe),
+                          ],
                           if (conteudo case final conteudo?) ...[
                             const SizedBox(height: AppEspacos.s6),
                             conteudo,
@@ -130,6 +142,45 @@ class TelaRetorno extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Chip do estande: surface-page, raio md, storefront de 20px e texto
+/// 14/20 600 em ink.
+class _ChipEstande extends StatelessWidget {
+  const _ChipEstande(this.texto);
+
+  final String texto;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppEspacos.s3,
+        vertical: AppEspacos.s2,
+      ),
+      decoration: BoxDecoration(
+        color: AppCores.surfacePage,
+        borderRadius: BorderRadius.circular(AppRaios.md),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(
+            Symbols.storefront_rounded,
+            size: AppIcones.md,
+            color: AppCores.ink,
+          ),
+          const SizedBox(width: AppEspacos.s2),
+          Flexible(
+            child: Text(
+              texto,
+              style: AppTipografia.detalheRetorno.copyWith(color: AppCores.ink),
+            ),
+          ),
+        ],
       ),
     );
   }
