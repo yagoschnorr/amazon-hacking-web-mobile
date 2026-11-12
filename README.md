@@ -19,19 +19,19 @@ Os dois usam o mesmo projeto Firebase, no plano Spark: Authentication, Firestore
 .
 ├── CLAUDE.md                 # regras para o Claude Code
 ├── README.md
-├── firebase.json             # regras do Firestore (etapa F1) e Hosting (etapa W9)
-├── .firebaserc               # id do projeto Firebase (etapa F1)
-├── firestore.rules           # regras de segurança (etapa F1)
-├── firestore.indexes.json    # (etapa F1)
+├── firebase.json             # regras do Firestore e Hosting
+├── .firebaserc               # id do projeto Firebase
+├── firestore.rules           # regras de segurança
+├── firestore.indexes.json
 ├── docs/
-│   ├── lauda.pdf
+│   ├── lauda.pdf             # enunciado da atividade
 │   ├── plano-de-implementacao.md
-│   ├── contrato-de-dados.md  # (etapa F1)
-│   ├── guia-firebase.md      # passos manuais no console (etapa F1)
-│   ├── roteiro-video.md      # (etapa D3)
+│   ├── contrato-de-dados.md  # coleções, Remote Config e eventos do Analytics
+│   ├── guia-firebase.md      # passos manuais no console e APK de release
+│   ├── roteiro-video.md      # roteiro da demonstração em vídeo
 │   └── design/               # tokens e telas de referência
-├── web/                      # painel (etapa W1 em diante)
-└── mobile/                   # app Flutter (etapa M1 em diante)
+├── web/                      # painel da organização (React + TypeScript)
+└── mobile/                   # app do visitante (Flutter, Android)
 ```
 
 ## Pré-requisitos
@@ -79,9 +79,35 @@ O painel fica em `https://<id-do-projeto>.web.app`. Esse domínio já vem autori
 
 ### App mobile
 
-<!-- Preenchido nas etapas M2 e M10. -->
+Dentro de `mobile/`, com um aparelho Android conectado por USB (com a depuração USB ligada) ou um emulador aberto:
 
-_A definir._
+```bash
+cd mobile
+flutter pub get
+flutter run
+```
+
+O app já está ligado ao projeto Firebase: `lib/firebase_options.dart` e `android/app/google-services.json` estão versionados (contêm identificadores, não segredos). O `flutterfire configure` só precisa ser rodado de novo para trocar de projeto.
+
+A leitura do QR code usa a câmera traseira. Num emulador, configure a câmera traseira como webcam (Device Manager → Advanced Settings → Camera → Back: Webcam0). Num aparelho físico, não há nada a configurar.
+
+| Comando | O que faz |
+| --- | --- |
+| `flutter run` | Roda o app em modo debug no aparelho ou emulador |
+| `flutter analyze` | Análise estática |
+| `flutter test` | Testes de unidade e de widget |
+| `flutter build apk --release` | APK de release assinado em `build/app/outputs/flutter-apk/app-release.apk` |
+
+O build de release exige a chave de upload: a keystore e o `android/key.properties` ficam fora do git, e sem eles o build falha de propósito. Passo a passo da chave, da conferência da assinatura e da instalação em [docs/guia-firebase.md](docs/guia-firebase.md#4-apk-de-release-assinado-etapa-m10). A versão vem de `version` no `pubspec.yaml`; aumente o número depois do `+` a cada APK distribuído.
+
+O visitante entra com sessão anônima, sem cadastro. A missão surpresa é controlada pelos parâmetros `missao_ativa`, `missao_estandes_ids`, `missao_inicio` e `missao_duracao_min` do Remote Config ([contrato de dados](docs/contrato-de-dados.md)); o padrão local é a missão desligada.
+
+#### Distribuir pelo Firebase App Distribution
+
+1. Gerar o APK de release (acima) e conferir a assinatura.
+2. No console do Firebase, em App Distribution, enviar o `app-release.apk`.
+3. Em Testadores e grupos, adicionar o e-mail do testador e distribuir.
+4. No Android do testador, abrir o convite por e-mail, aceitar, baixar e instalar.
 
 ### Regras do Firestore
 
@@ -100,6 +126,9 @@ Nunca versionar keystore (`*.jks`, `*.keystore`), `mobile/android/key.properties
 ## Documentação
 
 - [Plano de implementação](docs/plano-de-implementacao.md)
+- [Contrato de dados](docs/contrato-de-dados.md): coleções do Firestore, parâmetros do Remote Config e eventos do Analytics
+- [Guia do Firebase](docs/guia-firebase.md): passos no console, regras e APK de release
+- [Roteiro do vídeo](docs/roteiro-video.md)
 - [Tokens e componentes do design](docs/design/tokens.md)
 
 ## Licença
