@@ -158,3 +158,31 @@ Um APK de release não instala por cima de uma versão de debug, porque as assin
 O caminho completo dispensa ter o `adb` no PATH.
 
 Aceite: o APK instala em um aparelho ou emulador limpo e repete lista, check-in, missão e eventos, com a assinatura da chave de upload.
+
+## 5. Publicar a missão pelo painel (opcional)
+
+O botão **Iniciar missão**, na lista de estandes, abre um modal para escolher os estandes, o início e a duração. Ele publica os quatro parâmetros da missão direto no Remote Config. O SDK web do Remote Config só lê, então o painel usa a API REST do Remote Config com a autorização de uma conta Google do projeto, pedida num pop-up. O login de administrador (e-mail e senha) continua o mesmo.
+
+### Uma única vez
+
+1. **Authentication → Método de login:** ativar o provedor **Google**, informando o e-mail de suporte do projeto. Continua no plano Spark.
+2. Usar no pop-up a conta Google **proprietária ou editora** do projeto, a mesma que abre o console.
+3. Ao publicar pelo Hosting, o domínio `<id-do-projeto>.web.app` já vem autorizado. `localhost` também.
+
+### Ao publicar
+
+1. Clicar em **Iniciar missão**, escolher os estandes, o início e a duração (ou **Sem prazo**) e clicar em **Publicar missão**.
+2. No pop-up, escolher a conta Google do projeto e permitir o acesso. O Google pede acesso aos dados do Google Cloud (escopo `cloud-platform`): a API do Remote Config aceita esse escopo ou o `firebase.remoteconfig`, mas o segundo não pode aparecer na tela de consentimento e dá `Erro 400: invalid_scope`. O token fica só na memória da aba e não é salvo. O Google pode mostrar o aviso "O Google não verificou este app", porque o escopo é sensível e o app não passou pela verificação. Como a conta é sua e o projeto também, clique em **Avançado** e continue.
+3. O aviso "Missão publicada." aparece no painel, e o app aberto mostra o banner em segundos. No console, **Remote Config → Histórico de versões** mostra a versão com a descrição "Missão publicada pelo painel".
+
+A autorização vale por 50 minutos; depois disso, o pop-up aparece de novo. A conta Google entra em **Authentication → Usuários** como um usuário comum, sem acesso de administrador, porque não tem documento em `admins`.
+
+Para **encerrar** a missão, desligue `missao_ativa` no console. Se o painel não conseguir publicar, os quatro valores aparecem no modal com botão de copiar, para colar no console.
+
+| Mensagem no modal | O que fazer |
+| --- | --- |
+| O login com Google não está ativado | Fazer o passo 1 de "Uma única vez" |
+| Essa conta Google não pode publicar no Remote Config | Entrar com a conta proprietária. Se for a proprietária, ativar a "Firebase Remote Config API" no Google Cloud Console do projeto |
+| O navegador bloqueou a janela do Google | Permitir pop-ups para o endereço do painel |
+
+A lauda pede a missão ligada e desligada pelo console. No vídeo, o roteiro continua publicando pelo console (bloco 3).

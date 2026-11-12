@@ -567,6 +567,8 @@ feat(web): exibe total de check-ins por estande em tempo real
 
 O painel não publica no Remote Config. A lauda pede que a publicação seja feita pelo console.
 
+Depois do plano, o painel ganhou o botão **Iniciar missão**, pedido por Yago. Ele publica a missão pela API REST do Remote Config com a conta Google do projeto ([guia, seção 5](guia-firebase.md#5-publicar-a-missão-pelo-painel-opcional)). O vídeo continua publicando pelo console.
+
 Aceite: o texto copiado é um JSON válido contendo apenas os códigos selecionados.
 
 ```text

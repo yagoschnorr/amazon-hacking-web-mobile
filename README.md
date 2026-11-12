@@ -58,6 +58,8 @@ npm run dev                  # http://localhost:5173
 
 O login só aceita contas de administrador: um usuário de e-mail e senha no Authentication e um documento `admins/{uid}` no Firestore. Os dois são criados à mão no console ([guia](docs/guia-firebase.md)).
 
+Na lista de estandes, **Copiar IDs da missão** copia o JSON dos estandes marcados para colar no Remote Config. **Iniciar missão** abre um modal com estandes, início e duração e publica a missão direto no Remote Config. Para isso, é preciso ativar o login com Google e autorizar a conta do projeto num pop-up ([guia, seção 5](docs/guia-firebase.md#5-publicar-a-missão-pelo-painel-opcional)).
+
 | Comando | O que faz |
 | --- | --- |
 | `npm run dev` | Servidor de desenvolvimento |
