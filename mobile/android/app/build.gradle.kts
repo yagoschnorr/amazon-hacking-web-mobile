@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     // START: FlutterFire Configuration
@@ -5,6 +8,14 @@ plugins {
     // END: FlutterFire Configuration
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
+}
+
+// Chave de upload do APK de release (docs/guia-firebase.md, seção 4).
+// android/key.properties e a keystore ficam fora do git.
+val propriedadesChave = Properties()
+val arquivoChave = rootProject.file("key.properties")
+if (arquivoChave.exists()) {
+    FileInputStream(arquivoChave).use { propriedadesChave.load(it) }
 }
 
 android {
@@ -32,11 +43,22 @@ android {
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        create("release") {
+            // Sem key.properties, o build de release falha em vez de sair
+            // assinado com a chave de debug. O build de debug não é afetado.
+            if (arquivoChave.exists()) {
+                keyAlias = propriedadesChave.getProperty("keyAlias")
+                keyPassword = propriedadesChave.getProperty("keyPassword")
+                storeFile = file(propriedadesChave.getProperty("storeFile"))
+                storePassword = propriedadesChave.getProperty("storePassword")
+            }
+        }
+    }
+
     buildTypes {
         release {
-            // Assinatura de release com keystore própria fica para a etapa M10.
-            // Até lá, usa as chaves de debug para `flutter run --release` funcionar.
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 }

@@ -1,4 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Firestore, Auth, Remote Config e Analytics. Os manifestos de debug e
+         profile já declaram; aqui vale também para o release. -->
+    <uses-permission android:name="android.permission.INTERNET" />
     <!-- Leitura do QR code dos estandes (mobile_scanner). -->
     <uses-permission android:name="android.permission.CAMERA" />
     <application
