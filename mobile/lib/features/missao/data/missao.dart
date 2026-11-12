@@ -59,6 +59,23 @@ class Missao {
     return (restante.inMicroseconds / Duration.microsecondsPerMinute).ceil();
   }
 
+  /// Quantos estandes a missão tem, se o check-in em [estandeId] acabou de
+  /// concluí-la: ele participa e, com ele, todos os participantes ativos já
+  /// foram visitados. Nulo nos outros casos.
+  int? concluidaNoCheckin({
+    required String estandeId,
+    required Set<String> ativos,
+    required Set<String> visitados,
+    required DateTime agora,
+  }) {
+    if (!emVigor(agora)) return null;
+    final participantes = estandesIds.toSet().intersection(ativos);
+    final concluiu =
+        participantes.contains(estandeId) &&
+        visitados.containsAll(participantes);
+    return concluiu ? participantes.length : null;
+  }
+
   static List<String> _lerIds(String json) {
     try {
       final valor = jsonDecode(json);
@@ -72,6 +89,11 @@ class Missao {
     }
   }
 }
+
+/// "Você visitou os 2 estandes da missão."
+String mensagemConcluida(int total) => total == 1
+    ? 'Você visitou o estande da missão.'
+    : 'Você visitou os $total estandes da missão.';
 
 /// O que as telas mostram da missão: só os estandes participantes que estão
 /// ativos agora. Nulo quando a missão não está em vigor ou não tem nenhum
@@ -115,6 +137,17 @@ class ResumoMissao {
       if (!visitas.containsKey(estande.id)) estande,
   ];
 
+  /// Todos os participantes já visitados por este visitante.
+  bool concluida(Map<String, DateTime?> visitas) => faltando(visitas).isEmpty;
+
+  /// "Missão concluída!" depois de visitar todos; antes, [titulo].
+  String tituloPara(Map<String, DateTime?> visitas) =>
+      concluida(visitas) ? 'Missão concluída!' : titulo;
+
+  /// Sem contagem depois de concluída.
+  String? tempoPara(Map<String, DateTime?> visitas) =>
+      concluida(visitas) ? null : tempo;
+
   /// Os que ainda faltam na missão sobem para o topo, como nas telas 03 e 04;
   /// o resto mantém a ordem.
   List<Estande> ordenar(
@@ -147,7 +180,7 @@ class ResumoMissao {
   String mensagemBanner(Map<String, DateTime?> visitas) {
     final faltam = faltando(visitas);
     return switch (faltam) {
-      [] => 'Você visitou todos os estandes da missão.',
+      [] => mensagemConcluida(participantes.length),
       [final estande] => 'Falta ${estande.nome}, no ${estande.localizacao}.',
       _ => 'Faltam ${faltam.length} estandes da missão.',
     };

@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../core/analytics/analytics_service.dart';
 import '../../../core/constants/firestore.dart';
 import '../../estandes/data/estande.dart';
+import '../../missao/data/missao.dart';
 
 enum TipoResultado { sucesso, qrInvalido, estandeInativo, jaRegistrado, erro }
 
@@ -14,6 +15,7 @@ class ResultadoCheckin {
     this.estande,
     this.registradoEm,
     this.faltam,
+    this.missaoConcluidaCom,
   });
 
   final TipoResultado tipo;
@@ -26,6 +28,10 @@ class ResultadoCheckin {
 
   /// Estandes ativos que ainda faltam visitar (resultado `sucesso`).
   final int? faltam;
+
+  /// Quando este check-in concluiu a missão surpresa: quantos estandes ela
+  /// tem (resultado `sucesso`).
+  final int? missaoConcluidaCom;
 }
 
 class CheckinService {
@@ -47,7 +53,13 @@ class CheckinService {
   ///
   /// Quem garante as regras é o Firestore: um estande inativado entre a
   /// leitura e a gravação é barrado e vira `estandeInativo`.
-  Future<ResultadoCheckin> registrar(String estandeId) async {
+  ///
+  /// [missao] e [agora] servem só para saber se o check-in concluiu a missão.
+  Future<ResultadoCheckin> registrar(
+    String estandeId, {
+    Missao missao = Missao.desligada,
+    DateTime? agora,
+  }) async {
     final refEstande = _db.collection(Colecoes.estandes).doc(estandeId);
     final refCheckin = _db
         .collection(Colecoes.checkins)
@@ -76,10 +88,19 @@ class CheckinService {
           .timeout(_limiteGravacao);
       unawaited(_analytics.checkinConcluido(estandeId));
 
+      final progresso = await _progresso();
       return ResultadoCheckin(
         TipoResultado.sucesso,
         estande: estande,
-        faltam: await _faltam(),
+        faltam: progresso?.faltam,
+        missaoConcluidaCom: progresso == null
+            ? null
+            : missao.concluidaNoCheckin(
+                estandeId: estandeId,
+                ativos: progresso.ativos,
+                visitados: progresso.visitados,
+                agora: agora ?? DateTime.now(),
+              ),
       );
     } on FirebaseException catch (erro) {
       if (erro.code != 'permission-denied') {
@@ -109,7 +130,9 @@ class CheckinService {
   ) async {
     final doc = await refCheckin.get(
       // Uma gravação ainda não confirmada já traz um horário estimado.
-      const GetOptions(serverTimestampBehavior: ServerTimestampBehavior.estimate),
+      const GetOptions(
+        serverTimestampBehavior: ServerTimestampBehavior.estimate,
+      ),
     );
     if (!doc.exists) return null;
     return ResultadoCheckin(
@@ -120,9 +143,11 @@ class CheckinService {
     );
   }
 
-  /// Quantos estandes ativos o visitante ainda não visitou. Nulo se a
-  /// consulta falhar: a visita já foi registrada e o retorno continua valendo.
-  Future<int?> _faltam() async {
+  /// Estandes ativos e visitados depois da gravação, e quantos ativos ainda
+  /// faltam. Nulo se a consulta falhar: a visita já foi registrada e o
+  /// retorno continua valendo.
+  Future<({int faltam, Set<String> ativos, Set<String> visitados})?>
+  _progresso() async {
     try {
       final ativos = await _db
           .collection(Colecoes.estandes)
@@ -133,9 +158,15 @@ class CheckinService {
           .where(CamposCheckin.visitanteId, isEqualTo: visitanteId)
           .get();
       final visitados = {
-        for (final doc in visitas.docs) doc.data()[CamposCheckin.estandeId],
+        for (final doc in visitas.docs)
+          if (doc.data()[CamposCheckin.estandeId] case final String id) id,
       };
-      return ativos.docs.where((doc) => !visitados.contains(doc.id)).length;
+      final idsAtivos = {for (final doc in ativos.docs) doc.id};
+      return (
+        faltam: idsAtivos.difference(visitados).length,
+        ativos: idsAtivos,
+        visitados: visitados,
+      );
     } on FirebaseException {
       return null;
     }

@@ -3,7 +3,7 @@ description: "App do visitante do Circuito de Descobertas"
 publish_to: 'none'
 
 # versionName+versionCode do APK
-version: 1.0.0+1
+version: 1.0.1+2
 
 environment:
   sdk: ^3.13.7

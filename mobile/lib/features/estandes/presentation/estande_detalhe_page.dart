@@ -7,7 +7,6 @@ import '../../../app/theme/app_medidas.dart';
 import '../../../app/theme/app_tipografia.dart';
 import '../../../core/widgets/app_button.dart';
 import '../../../core/widgets/rodape_fixo.dart';
-import '../../checkin/presentation/scanner_page.dart';
 import '../data/estande.dart';
 import 'avatar_estande.dart';
 import 'estande_card.dart';
@@ -18,9 +17,11 @@ class EstandeDetalhePage extends StatelessWidget {
     super.key,
     required this.estande,
     required this.visitas,
+    required this.aoLerQrCode,
   });
 
   final Estande estande;
+  final VoidCallback aoLerQrCode;
 
   /// Check-ins do visitante (CheckinRepository.visitas).
   final Stream<Map<String, DateTime?>> visitas;
@@ -98,7 +99,7 @@ class EstandeDetalhePage extends StatelessWidget {
                 child: AppButton(
                   label: 'Ler QR code',
                   icon: Symbols.qr_code_scanner_rounded,
-                  onPressed: () => abrirLeitor(context),
+                  onPressed: aoLerQrCode,
                 ),
               ),
             ],

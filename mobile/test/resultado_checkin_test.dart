@@ -73,6 +73,28 @@ void main() {
     expect(find.text('Estande Teste · Corredor X'), findsOneWidget);
   });
 
+  testWidgets('check-in que conclui a missão mostra a conclusão', (
+    tester,
+  ) async {
+    final tocar = montar(
+      tester,
+      const ResultadoCheckin(
+        TipoResultado.sucesso,
+        estande: estande,
+        faltam: 3,
+        missaoConcluidaCom: 2,
+      ),
+    );
+    expect(await tocar('Ver estandes'), AcaoRetorno.voltarAoInicio);
+
+    await tester.tap(find.text('abrir'));
+    await tester.pumpAndSettle();
+    expect(find.text('MISSÃO CONCLUÍDA'), findsOneWidget);
+    expect(find.text('Parabéns, você completou a missão!'), findsOneWidget);
+    expect(find.text('Você visitou os 2 estandes da missão.'), findsOneWidget);
+    expect(find.text('Estande Teste · Corredor X'), findsOneWidget);
+  });
+
   testWidgets('já registrado mostra o horário da visita', (tester) async {
     final tocar = montar(
       tester,

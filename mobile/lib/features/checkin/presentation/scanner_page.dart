@@ -9,15 +9,20 @@ import '../../../app/theme/app_cores.dart';
 import '../../../app/theme/app_medidas.dart';
 import '../../../app/theme/app_tipografia.dart';
 import '../../auth/data/auth_service.dart';
+import '../../missao/data/missao_controller.dart';
 import '../data/checkin_service.dart';
 import '../data/qr_payload.dart';
 import 'permissao_camera_negada.dart';
 import 'resultado_checkin_page.dart';
 
-/// Botão "Ler QR code" do início e do detalhe.
-Future<void> abrirLeitor(BuildContext context) {
-  return Navigator.of(context)
-      .push<void>(MaterialPageRoute(builder: (_) => const ScannerPage()));
+/// Botão "Ler QR code" do início, do detalhe e da missão.
+Future<void> abrirLeitor(
+  BuildContext context, {
+  required MissaoController missao,
+}) {
+  return Navigator.of(
+    context,
+  ).push<void>(MaterialPageRoute(builder: (_) => ScannerPage(missao: missao)));
 }
 
 /// Leitor de QR code (docs/design/mobile/06-leitor-de-qr-code.png).
@@ -25,7 +30,10 @@ Future<void> abrirLeitor(BuildContext context) {
 /// o leitor fica pausado enquanto registra o check-in e até o retorno ser
 /// fechado.
 class ScannerPage extends StatefulWidget {
-  const ScannerPage({super.key});
+  const ScannerPage({super.key, required this.missao});
+
+  /// Para saber se o check-in concluiu a missão surpresa.
+  final MissaoController missao;
 
   @override
   State<ScannerPage> createState() => _ScannerPageState();
@@ -81,7 +89,11 @@ class _ScannerPageState extends State<ScannerPage> with WidgetsBindingObserver {
     while (true) {
       final resultado = estandeId == null
           ? const ResultadoCheckin(TipoResultado.qrInvalido)
-          : await _checkins.registrar(estandeId);
+          : await _checkins.registrar(
+              estandeId,
+              missao: widget.missao.missao,
+              agora: widget.missao.agora,
+            );
       if (!mounted) return;
 
       final acao = await navegador.push<AcaoRetorno>(

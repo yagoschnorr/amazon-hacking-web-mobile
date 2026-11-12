@@ -62,10 +62,13 @@ class _HomePageState extends State<HomePage> {
         builder: (_) => EstandeDetalhePage(
           estande: estande,
           visitas: _checkinRepository.visitas(widget.visitanteId),
+          aoLerQrCode: _lerQrCode,
         ),
       ),
     );
   }
+
+  void _lerQrCode() => abrirLeitor(context, missao: widget.missao);
 
   void _abrirMissao(List<Estande> estandes, Map<String, DateTime?> visitas) {
     unawaited(_analytics.missaoAberta());
@@ -113,6 +116,7 @@ class _HomePageState extends State<HomePage> {
                   widget.missao.agora,
                 ),
                 aoVerMissao: () => _abrirMissao(lista, mapa),
+                aoLerQrCode: _lerQrCode,
               ),
             );
           },
@@ -132,6 +136,7 @@ class ListaEstandes extends StatelessWidget {
     required this.aoTocar,
     this.missao,
     this.aoVerMissao,
+    required this.aoLerQrCode,
   });
 
   final List<Estande> estandes;
@@ -139,6 +144,7 @@ class ListaEstandes extends StatelessWidget {
   final ValueChanged<Estande> aoTocar;
   final ResumoMissao? missao;
   final VoidCallback? aoVerMissao;
+  final VoidCallback aoLerQrCode;
 
   @override
   Widget build(BuildContext context) {
@@ -179,9 +185,9 @@ class ListaEstandes extends StatelessWidget {
               children: [
                 if (missao case final missao?) ...[
                   MissaoBanner(
-                    titulo: missao.titulo,
+                    titulo: missao.tituloPara(visitas),
                     mensagem: missao.mensagemBanner(visitas),
-                    tempo: missao.tempo,
+                    tempo: missao.tempoPara(visitas),
                     aoVerMissao: aoVerMissao ?? () {},
                   ),
                   const SizedBox(height: AppEspacos.s3),
@@ -228,7 +234,7 @@ class ListaEstandes extends StatelessWidget {
             child: AppButton(
               label: 'Ler QR code',
               icon: Symbols.qr_code_scanner_rounded,
-              onPressed: () => abrirLeitor(context),
+              onPressed: aoLerQrCode,
             ),
           ),
         ],

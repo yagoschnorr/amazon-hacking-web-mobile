@@ -112,6 +112,7 @@ class _MissaoPageState extends State<MissaoPage> {
               resumo: resumo,
               visitas: visitas.data ?? widget.visitasIniciais,
               aoAbrirEstande: widget.aoAbrirEstande,
+              aoLerQrCode: () => abrirLeitor(context, missao: widget.missao),
             );
           },
         ),
@@ -125,11 +126,13 @@ class _Conteudo extends StatelessWidget {
     required this.resumo,
     required this.visitas,
     required this.aoAbrirEstande,
+    required this.aoLerQrCode,
   });
 
   final ResumoMissao resumo;
   final Map<String, DateTime?> visitas;
   final ValueChanged<Estande> aoAbrirEstande;
+  final VoidCallback aoLerQrCode;
 
   @override
   Widget build(BuildContext context) {
@@ -171,7 +174,7 @@ class _Conteudo extends StatelessWidget {
             child: AppButton(
               label: 'Ler QR code',
               icon: Symbols.qr_code_scanner_rounded,
-              onPressed: () => abrirLeitor(context),
+              onPressed: aoLerQrCode,
             ),
           ),
         ],
@@ -192,7 +195,19 @@ class _Topo extends StatelessWidget {
   Widget build(BuildContext context) {
     final total = resumo.participantes.length;
     final visitados = total - resumo.faltando(visitas).length;
-    final tempo = resumo.tempo;
+    final tempo = resumo.tempoPara(visitas);
+    final String mensagem;
+    if (resumo.concluida(visitas)) {
+      mensagem = mensagemConcluida(total);
+    } else if (tempo == null) {
+      mensagem =
+          'Leia o QR code dos estandes participantes. '
+          'Cada visita conta uma vez.';
+    } else {
+      mensagem =
+          'Leia o QR code dos estandes participantes antes que o tempo '
+          'acabe. Cada visita conta uma vez.';
+    }
 
     final progresso = Text(
       '$visitados de $total ${total == 1 ? 'visitado' : 'visitados'}',
@@ -261,19 +276,14 @@ class _Topo extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
-                        resumo.titulo,
+                        resumo.tituloPara(visitas),
                         style: AppTipografia.tituloMissao.copyWith(
                           color: AppCores.onMissao,
                         ),
                       ),
                       const SizedBox(height: AppEspacos.s3),
                       Text(
-                        tempo == null
-                            ? 'Leia o QR code dos estandes participantes. '
-                                  'Cada visita conta uma vez.'
-                            : 'Leia o QR code dos estandes participantes '
-                                  'antes que o tempo acabe. Cada visita conta '
-                                  'uma vez.',
+                        mensagem,
                         style: AppTipografia.bodyLg.copyWith(
                           color: AppCores.onMissao,
                         ),

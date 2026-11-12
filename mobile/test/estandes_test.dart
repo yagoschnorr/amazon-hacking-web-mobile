@@ -44,6 +44,7 @@ void main() {
             estandes: estandes,
             visitas: visitas,
             aoTocar: (_) {},
+            aoLerQrCode: () {},
           ),
         ),
       );

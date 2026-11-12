@@ -79,6 +79,36 @@ void main() {
     });
   });
 
+  group('concluidaNoCheckin', () {
+    int? concluir(String id, Set<String> visitados, {Missao? missao}) =>
+        (missao ?? ler()).concluidaNoCheckin(
+          estandeId: id,
+          ativos: const {'E01', 'E02', 'E03'},
+          visitados: visitados,
+          agora: agora,
+        );
+
+    test('o último participante pendente conclui a missão', () {
+      expect(concluir('E02', {'E01', 'E02'}), 2);
+    });
+
+    test('ainda falta participante: não conclui', () {
+      expect(concluir('E01', {'E01'}), isNull);
+    });
+
+    test('estande fora da missão não conclui de novo', () {
+      expect(concluir('E03', {'E01', 'E02', 'E03'}), isNull);
+    });
+
+    test('participante inativo não conta e missão desligada não conclui', () {
+      expect(concluir('E01', {'E01'}, missao: ler(ids: '["E01","E09"]')), 1);
+      expect(
+        concluir('E02', {'E01', 'E02'}, missao: ler(ativa: false)),
+        isNull,
+      );
+    });
+  });
+
   group('ResumoMissao', () {
     test('usa só os participantes ativos', () {
       final resumo = ResumoMissao.calcular(ler(ids: '["E02","E09"]'), [
@@ -114,8 +144,29 @@ void main() {
       );
       expect(
         resumo.mensagemBanner({'E01': null, 'E02': null}),
-        'Você visitou todos os estandes da missão.',
+        'Você visitou os 2 estandes da missão.',
       );
+    });
+
+    test('concluída: título próprio e sem contagem', () {
+      final resumo = ResumoMissao.calcular(
+        ler(inicio: '2026-11-11T10:45:00-03:00', duracaoMin: 30),
+        [e01, e02],
+        agora,
+      )!;
+      expect(resumo.concluida({'E01': null}), isFalse);
+      expect(resumo.tituloPara({'E01': null}), 'Visite 2 estandes em 30 min');
+      expect(resumo.tempoPara({'E01': null}), 'Faltam 25 min');
+
+      final todas = {'E01': null, 'E02': null};
+      expect(resumo.concluida(todas), isTrue);
+      expect(resumo.tituloPara(todas), 'Missão concluída!');
+      expect(resumo.tempoPara(todas), isNull);
+    });
+
+    test('mensagem de conclusão no singular e no plural', () {
+      expect(mensagemConcluida(1), 'Você visitou o estande da missão.');
+      expect(mensagemConcluida(3), 'Você visitou os 3 estandes da missão.');
     });
 
     test('pendentes da missão sobem para o topo', () {
@@ -139,6 +190,7 @@ void main() {
           estandes: [e01, e02],
           visitas: const {'E01': null},
           aoTocar: (_) {},
+          aoLerQrCode: () {},
           missao: ResumoMissao.calcular(ler(), [e01, e02], agora),
           aoVerMissao: () {},
         ),

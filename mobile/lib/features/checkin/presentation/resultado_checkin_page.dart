@@ -4,6 +4,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import '../../../app/theme/app_cores.dart';
 import '../../../core/widgets/tela_retorno.dart';
 import '../../estandes/presentation/estande_card.dart';
+import '../../missao/data/missao.dart';
 import '../data/checkin_service.dart';
 
 /// O que o visitante escolheu na tela de retorno. Fechar pelo voltar do
@@ -18,7 +19,8 @@ String mensagemFaltam(int faltam) => switch (faltam) {
 };
 
 /// Retorno do check-in (docs/design/mobile/08 a 11). Fecha com a
-/// [AcaoRetorno] escolhida.
+/// [AcaoRetorno] escolhida. O check-in que conclui a missão usa o tipo
+/// `missao` do FeedbackScreen (missao-soft e missao-ink).
 class ResultadoCheckinPage extends StatelessWidget {
   const ResultadoCheckinPage({super.key, required this.resultado});
 
@@ -32,7 +34,25 @@ class ResultadoCheckinPage extends StatelessWidget {
         ? null
         : '${estande.nome} · ${estande.localizacao}';
 
+    final missaoConcluidaCom = resultado.missaoConcluidaCom;
+
     return switch (resultado.tipo) {
+      TipoResultado.sucesso when missaoConcluidaCom != null => TelaRetorno(
+        icone: Symbols.bolt_rounded,
+        iconePreenchido: true,
+        corCirculo: AppCores.missaoSoft,
+        corIcone: AppCores.missaoInk,
+        sobretitulo: 'MISSÃO CONCLUÍDA',
+        corSobretitulo: AppCores.missaoInk,
+        titulo: 'Parabéns, você completou a missão!',
+        mensagem: mensagemConcluida(missaoConcluidaCom),
+        detalhe: detalhe,
+        rotuloPrincipal: 'Ler outro QR code',
+        iconePrincipal: Symbols.qr_code_scanner_rounded,
+        aoPrincipal: () => fechar(AcaoRetorno.lerOutro),
+        rotuloSecundario: 'Ver estandes',
+        aoSecundario: () => fechar(AcaoRetorno.voltarAoInicio),
+      ),
       TipoResultado.sucesso => TelaRetorno(
         icone: Symbols.check_circle_rounded,
         iconePreenchido: true,
